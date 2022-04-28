@@ -20,6 +20,10 @@ import java.util.stream.Collectors;
 
 public class JsonParser {
 
+    private JsonParser(){
+        throw new IllegalStateException("Utility class");
+    }
+
     public static List<Issue> getIssues(JSONObject jsonResult) throws ParseException {
         JSONArray jsonIssues = jsonResult.getJSONArray("issues");
         List<Issue> issues = new ArrayList<>();
@@ -85,7 +89,7 @@ public class JsonParser {
             else{
                 String[] wordsSplitted = Arrays.asList(line.split("\\s+")).stream().filter(str -> !str.isEmpty()).collect(Collectors.toList()).toArray(new String[0]);
                 List<String> words = Arrays.asList(wordsSplitted);
-                if(words.size() > 0){
+                if(!words.isEmpty()){
                     if(words.get(0).startsWith("commit") && isAtTheEnd){
                         if(commit != null){
                             commits.add(commit);
@@ -133,6 +137,8 @@ public class JsonParser {
                     break;
                 case "D":
                     commit.addClassDeleted(file);
+                    break;
+                default:
                     break;
             }
         }

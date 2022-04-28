@@ -2,13 +2,13 @@ package model;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Release {
 
     private String name;
     private Date releasedDate;
-
-    private HashMap<String, Boolean> classes;
+    private Map<String, Boolean> classes;
 
     public Release(String name, Date releasedDate) {
         this.name = name;
@@ -35,11 +35,11 @@ public class Release {
         this.releasedDate = releasedDate;
     }
 
-    public HashMap<String, Boolean> getClasses() {
+    public Map<String, Boolean> getClasses() {
         return classes;
     }
 
-    public void setClasses(HashMap<String, Boolean> classes) {
+    public void setClasses(Map<String, Boolean> classes) {
         this.classes = classes;
     }
 

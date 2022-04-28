@@ -4,17 +4,21 @@ import model.Commit;
 import model.Issue;
 import model.Release;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DataCreator {
+
+    private DataCreator(){
+        throw new IllegalStateException("Utility class");
+    }
 
     public static void releaseClassesLinkage(List<Commit> commits, List<Release> releases){
         int i = 0;
         int j = commits.size()-1;
         Release currentRelease;
         Commit currentCommit;
-        HashMap<String, Boolean> classes = null;
+        Map<String, Boolean> classes = null;
         //Scorro tutte le releases in ordine cronologico crescente
         while(i < releases.size()){
             currentRelease = releases.get(i);
@@ -22,7 +26,7 @@ public class DataCreator {
                 // Dalla seconda release in poi, questa avrà anche le classi della release precedente
                 currentRelease.setClasses(classes);
             }
-            // Scorro tutti i commpits in ordine cronologico crescente
+            // Scorro tutti i commits in ordine cronologico crescente
             while(j >= 0){
                 currentCommit = commits.get(j);
                 if(currentCommit.getDate().before(currentRelease.getReleasedDate())){
@@ -53,7 +57,7 @@ public class DataCreator {
 
         for(int i = 0; i < commits.size(); i++){
             Commit commit = commits.get(i);
-            if(commit.getIssues().size() == 0){
+            if(commit.getIssues().isEmpty()){
                 commits.remove(commit);
             }
             else{

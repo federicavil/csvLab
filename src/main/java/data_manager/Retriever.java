@@ -25,7 +25,9 @@ public class Retriever {
     }
 
     public List<Issue> retrieveIssues() throws IOException, ParseException {
-        int i = 0, j = 0, total = 1;
+        int i = 0;
+        int j = 0;
+        int total = 1;
         String url;
         List<Issue> issues = new ArrayList<>();
         while(i < total){
@@ -44,8 +46,7 @@ public class Retriever {
     public List<Release> retrieveReleases() throws IOException, ParseException {
         String url = "https://issues.apache.org/jira/rest/api/2/project/" + this.projectname + "/versions";
         JSONArray jsonResult = JsonReader.readJsonArrayFromUrl(url);
-        List<Release> releases = JsonParser.getReleases(jsonResult);
-        return releases;
+        return JsonParser.getReleases(jsonResult);
     }
 
     public List<Commit> retrieveCommits() throws IOException, ParseException {
@@ -54,7 +55,7 @@ public class Retriever {
         builder.redirectErrorStream(true);
         Process p = builder.start();
         BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        List<Commit> commits = JsonParser.getCommits(r,this.projectname);
-        return commits;
+        return JsonParser.getCommits(r,this.projectname);
+
     }
 }

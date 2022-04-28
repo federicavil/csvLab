@@ -1,8 +1,8 @@
-package Json;
+package json;
 
-import Model.Commit;
-import Model.Issue;
-import Model.Release;
+import model.Commit;
+import model.Issue;
+import model.Release;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

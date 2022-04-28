@@ -1,8 +1,8 @@
-import DataManager.DataCreator;
-import DataManager.Retriever;
-import Model.Commit;
-import Model.Issue;
-import Model.Release;
+import data_manager.DataCreator;
+import data_manager.Retriever;
+import model.Commit;
+import model.Issue;
+import model.Release;
 
 import java.io.IOException;
 import java.text.ParseException;

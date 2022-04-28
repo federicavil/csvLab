@@ -1,8 +1,8 @@
-package DataManager;
+package data_manager;
 
-import Model.Commit;
-import Model.Issue;
-import Model.Release;
+import model.Commit;
+import model.Issue;
+import model.Release;
 
 import java.util.HashMap;
 import java.util.List;

@@ -1,10 +1,10 @@
-package DataManager;
+package data_manager;
 
-import Json.JsonParser;
-import Json.JsonReader;
-import Model.Commit;
-import Model.Issue;
-import Model.Release;
+import json.JsonParser;
+import json.JsonReader;
+import model.Commit;
+import model.Issue;
+import model.Release;
 import org.json.*;
 
 import java.io.*;

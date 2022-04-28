@@ -81,39 +81,41 @@ public class JsonParser {
     public static List<Commit> getCommits(BufferedReader reader, String projectName) throws IOException, ParseException {
         List<Commit> commits = new ArrayList<>();
         Commit commit = null;
-        String line;
+        String line = reader.readLine();
         boolean isAtTheEnd = true;
-        while(true){
-            line = reader.readLine();
-            if(line == null) break;
-            else{
-                String[] wordsSplitted = Arrays.asList(line.split("\\s+")).stream().filter(str -> !str.isEmpty()).collect(Collectors.toList()).toArray(new String[0]);
-                List<String> words = Arrays.asList(wordsSplitted);
-                if(!words.isEmpty()){
-                    if(words.get(0).startsWith("commit") && isAtTheEnd){
-                        if(commit != null){
-                            commits.add(commit);
-                        }
-                        commit = new Commit();
-                        commit.setId(words.get(1));
-                        isAtTheEnd = false;
-                    }
-                    else if(words.get(0).startsWith("Author") && commit.getAuthor() == null){
-                        commit.setAuthor(words.get(words.size()-1));
-                    }
-                    else if(words.get(0).startsWith("Date") && commit.getDate() == null){
-                        commit.setDate(stringToDate(words.get(1)));
-                    }
-                    else if(words.get(0).equals("A") || words.get(0).equals("D") || words.get(0).equals("M")){
-                        isAtTheEnd = addFile(commit,words.get(1),words.get(0));
-                    }
-                    else{
-                        addIssues(commit, words, projectName);
-                    }
+        while(line != null){
+            String[] wordsSplitted = Arrays.asList(line.split("\\s+")).stream().filter(str -> !str.isEmpty()).collect(Collectors.toList()).toArray(new String[0]);
+            List<String> words = Arrays.asList(wordsSplitted);
+            if(!words.isEmpty()){
+                if(words.get(0).startsWith("commit") && isAtTheEnd){
+                    commit = startNewCommit(commit,commits);
+                    commit.setId(words.get(1));
+                    isAtTheEnd = false;
+                }
+                else if(words.get(0).startsWith("Author") && commit.getAuthor() == null){
+                    commit.setAuthor(words.get(words.size()-1));
+                }
+                else if(words.get(0).startsWith("Date") && commit.getDate() == null){
+                    commit.setDate(stringToDate(words.get(1)));
+                }
+                else if(words.get(0).equals("A") || words.get(0).equals("D") || words.get(0).equals("M")){
+                    isAtTheEnd = addFile(commit,words.get(1),words.get(0));
+                }
+                else{
+                    addIssues(commit, words, projectName);
                 }
             }
+            line = reader.readLine();
         }
         return commits;
+    }
+
+    private static Commit startNewCommit(Commit commit, List<Commit> commits){
+        if(commit != null){
+            commits.add(commit);
+        }
+        return new Commit();
+
     }
 
     private static void addIssues(Commit commit, List<String> words, String projectName){

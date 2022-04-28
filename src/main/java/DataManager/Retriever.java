@@ -1,5 +1,8 @@
+package DataManager;
+
 import Json.JsonParser;
 import Json.JsonReader;
+import Model.Commit;
 import Model.Issue;
 import Model.Release;
 import org.json.*;
@@ -21,7 +24,7 @@ public class Retriever {
         this.branch = branch;
     }
 
-    public void retrieveBugs() throws IOException, ParseException {
+    public List<Issue> retrieveIssues() throws IOException, ParseException {
         int i = 0, j = 0, total = 1;
         String url;
         List<Issue> issues = new ArrayList<>();
@@ -35,25 +38,23 @@ public class Retriever {
             total = jsonResult.getInt("total");
             i = j+1;
         }
+        return issues;
     }
 
-    public void retrieveReleases() throws IOException, ParseException {
+    public List<Release> retrieveReleases() throws IOException, ParseException {
         String url = "https://issues.apache.org/jira/rest/api/2/project/" + this.projectname + "/versions";
         JSONArray jsonResult = JsonReader.readJsonArrayFromUrl(url);
-        List<Release> releases = JsonParser.getRelease(jsonResult);
+        List<Release> releases = JsonParser.getReleases(jsonResult);
+        return releases;
     }
 
-    public void retrieveCommits() throws IOException {
+    public List<Commit> retrieveCommits() throws IOException, ParseException {
         ProcessBuilder builder = new ProcessBuilder(
                 "cmd.exe", "/c", "cd " + this.projectLocation+ " && git log --name-status --date=iso --stat "+ this.branch);
         builder.redirectErrorStream(true);
         Process p = builder.start();
         BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        String line;
-        while (true) {
-            line = r.readLine();
-            if (line == null) { break; }
-            System.out.println(line);
-        }
+        List<Commit> commits = JsonParser.getCommits(r,this.projectname);
+        return commits;
     }
 }

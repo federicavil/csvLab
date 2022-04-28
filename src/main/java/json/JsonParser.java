@@ -101,28 +101,31 @@ public class JsonParser {
                     else if(words.get(0).startsWith("Author") && commit.getAuthor() == null){
                         commit.setAuthor(words.get(words.size()-1));
                     }
-                    else if(words.get(0).startsWith("Date")){
-                        if(commit.getDate() == null)
-                            commit.setDate(stringToDate(words.get(1)));
+                    else if(words.get(0).startsWith("Date") && commit.getDate() == null){
+                        commit.setDate(stringToDate(words.get(1)));
                     }
                     else if(words.get(0).equals("A") || words.get(0).equals("D") || words.get(0).equals("M")){
                         isAtTheEnd = addFile(commit,words.get(1),words.get(0));
                     }
                     else{
-                        for(String word: words){
-                            if(Pattern.matches(projectName + "-[0-9]+", word) || Pattern.matches("#[0-9]+",word)){
-                                commit.addIssue(word);
-                            }
-                            else if(Pattern.matches("#[0-9]+",word)){
-                                word = projectName + "-" + word.substring(1);
-                                commit.addIssue(word);
-                            }
-                        }
+                        addIssues(commit, words, projectName);
                     }
                 }
             }
         }
         return commits;
+    }
+
+    private static void addIssues(Commit commit, List<String> words, String projectName){
+        for(String word: words){
+            if(Pattern.matches(projectName + "-[0-9]+", word) || Pattern.matches("#[0-9]+",word)){
+                commit.addIssue(word);
+            }
+            else if(Pattern.matches("#[0-9]+",word)){
+                word = projectName + "-" + word.substring(1);
+                commit.addIssue(word);
+            }
+        }
     }
 
     private static boolean addFile(Commit commit, String file, String mode ){

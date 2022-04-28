@@ -61,21 +61,21 @@ public class DataCreator {
                 commits.remove(commit);
             }
             else{
-                boolean isNecessary = false;
-                for(String issueCommit: commit.getIssues()){
-                    for(Issue issueJira: issues){
-                        if(issueJira.getkey().equals(issueCommit)){
-                            isNecessary = true;
-                            break;
-                        }
-                    }
-                    if(isNecessary) break;
-                }
-                if(!isNecessary)
+                if(!isLinkedToIssue(commit,issues))
                     commits.remove(commit);
             }
         }
+    }
 
+    private static boolean isLinkedToIssue(Commit commit, List<Issue> issues){
+        for(String issueCommit: commit.getIssues()) {
+            for (Issue issueJira : issues) {
+                if(issueJira.getkey().equals(issueCommit)){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

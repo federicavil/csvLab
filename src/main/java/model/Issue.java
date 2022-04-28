@@ -12,14 +12,6 @@ public class Issue {
     private Date fixDate;
     private List<Release> affectedVersions;
 
-    public Issue(String id, String key,Date creationDate, Date fixDate, ArrayList<Release> affectedVersions){
-        this.id = id;
-        this.key = key;
-        this.creationDate = creationDate;
-        this.fixDate = fixDate;
-        this.affectedVersions = affectedVersions;
-    }
-
     public Issue() {
         this.affectedVersions = new ArrayList<>();
     }

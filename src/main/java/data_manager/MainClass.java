@@ -1,7 +1,5 @@
 package data_manager;
 
-import data_manager.DataCreator;
-import data_manager.Retriever;
 import model.Commit;
 import model.Issue;
 import model.Release;

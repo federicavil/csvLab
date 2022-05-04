@@ -10,12 +10,12 @@ import java.util.List;
 
 public class MainClass {
 
-    private static final String PROJECT_NAME = "BOOKKEEPER";
-    private static final String PROJECT_LOCATION = "C:/Users/Federica/git/bookkeeper_ml";
+    private static final String PROJECT_NAME = "AVRO";
+    private static final String PROJECT_LOCATION = "C:/Users/Federica/git/avro";
     private static final String BRANCH = "HEAD";
 
     public static void main(String[] args){
-        Retriever ret = new Retriever(PROJECT_NAME, PROJECT_LOCATION, BRANCH);
+        DataRetriever ret = new DataRetriever(PROJECT_NAME, PROJECT_LOCATION, BRANCH);
 
         List<Release> releases;
         List<Issue> issues;
@@ -26,11 +26,14 @@ public class MainClass {
             issues = ret.retrieveIssues();
             releases = ret.retrieveReleases();
             commits = ret.retrieveCommits();
+            // Elimino l'ultima metà delle releases
+            releases = releases.subList(0,releases.size()/2);
             // Determino le classi presenti nelle varie releases
-            DataCreator.releaseClassesLinkage(commits,releases);
-            // Elimino i commit che non si riferiscono alle issue prese in considerazione
-
-            DataCreator.deleteUnnecessaryCommits(commits,issues);
+            DataPreparer.releaseClassesLinkage(commits,releases);
+            // Determino i commits relativi alle varie issues
+            DataPreparer.commitsIssuesLinkage(commits,issues);
+            // Calcolo la bugginess delle classi
+            DataCalculator.calculateBugginess(releases,issues);
 
         } catch (IOException | ParseException e) {
             e.printStackTrace();

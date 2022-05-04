@@ -11,9 +11,19 @@ public class Issue {
     private Date creationDate;
     private Date fixDate;
     private List<Release> affectedVersions;
+    private List<Commit> relatedCommits;
 
     public Issue() {
         this.affectedVersions = new ArrayList<>();
+        this.relatedCommits = new ArrayList<>();
+    }
+
+    public List<Commit> getRelatedCommits() {
+        return relatedCommits;
+    }
+
+    public void setRelatedCommits(List<Commit> relatedCommits) {
+        this.relatedCommits = relatedCommits;
     }
 
     public String getId() {

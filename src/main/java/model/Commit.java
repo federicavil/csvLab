@@ -11,6 +11,7 @@ public class Commit {
     private Set<String> classAdded;
     private Set<String> classModified;
     private Set<String> classDeleted;
+    private Set<String> classRenamed;
 
     public Commit() {
         this.author = null;

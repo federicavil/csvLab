@@ -12,13 +12,13 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Retriever {
+public class DataRetriever {
 
     private String projectname;
     private String projectLocation;
     private String branch;
 
-    public Retriever(String projectName, String projectLocation, String branch){
+    public DataRetriever(String projectName, String projectLocation, String branch){
         this.projectname = projectName;
         this.projectLocation = projectLocation;
         this.branch = branch;
@@ -51,7 +51,7 @@ public class Retriever {
 
     public List<Commit> retrieveCommits() throws IOException, ParseException {
         ProcessBuilder builder = new ProcessBuilder(
-                "cmd.exe", "/c", "cd " + this.projectLocation+ " && git log --name-status --date=iso --stat "+ this.branch);
+                "cmd.exe", "/c", "cd " + this.projectLocation+ " && git log --full-history --name-status --date=iso --stat "+ this.branch);
         builder.redirectErrorStream(true);
         Process p = builder.start();
         BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));

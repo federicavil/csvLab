@@ -3,6 +3,7 @@ package json;
 import model.Commit;
 import model.Issue;
 import model.Release;
+import model.RenamedClassesList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,10 +12,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -98,8 +96,8 @@ public class JsonParser {
                 else if(words.get(0).startsWith("Date") && commit.getDate() == null){
                     commit.setDate(stringToDate(words.get(1)));
                 }
-                else if(words.get(0).equals("A") || words.get(0).equals("D") || words.get(0).equals("M")){
-                    isAtTheEnd = addFile(commit,words.get(1),words.get(0));
+                else if(words.get(0).equals("A") || words.get(0).equals("D") || words.get(0).equals("M") || Pattern.matches("R[0-9]+",words.get(0))){
+                    isAtTheEnd = addFile(commit,words.subList(1,words.size()),words.get(0));
                 }
                 else{
                     addIssues(commit, words, projectName);
@@ -120,7 +118,7 @@ public class JsonParser {
 
     private static void addIssues(Commit commit, List<String> words, String projectName){
         for(String word: words){
-            if(Pattern.matches(projectName + "-[0-9]+", word) || Pattern.matches("#[0-9]+",word)){
+            if(Pattern.matches(projectName + "-[0-9]+", word)){
                 commit.addIssue(word);
             }
             else if(Pattern.matches("#[0-9]+",word)){
@@ -130,8 +128,9 @@ public class JsonParser {
         }
     }
 
-    private static boolean addFile(Commit commit, String file, String mode ){
+    private static boolean addFile(Commit commit, List<String> files, String mode ){
         // Aggiunge una classe alla lista a cui fa riferimento
+        String file = files.get(0);
         if(file.contains(".java") && !file.contains("test")){
             switch(mode){
                 case "A":
@@ -144,9 +143,26 @@ public class JsonParser {
                     commit.addClassDeleted(file);
                     break;
                 default:
+                    updateRenameFiles(commit,file, files.get(1));
                     break;
             }
         }
         return true;
+    }
+
+    private static void updateRenameFiles(Commit commit, String oldFile, String newFile){
+        commit.addClassDeleted(oldFile);
+        commit.addClassAdded(newFile);
+        HashMap<String, List<String>> renamed = RenamedClassesList.getInstance().getRenamedClasses();
+        List<String> newRename = renamed.get(oldFile);
+        if(newRename == null){
+            newRename = new ArrayList<>();
+        }
+        else{
+            RenamedClassesList.getInstance().getRenamedClasses().remove(oldFile);
+        }
+        newRename.add(oldFile);
+        RenamedClassesList.getInstance().getRenamedClasses().put(newFile, newRename);
+
     }
 }

@@ -30,10 +30,10 @@ public class DataCalculator {
     private static void updateClassBugginess(Release affectedVersion, List<Commit> relatedCommit){
         for(Commit commit: relatedCommit){
             for(String file: commit.getClassModified()){
+                System.out.println("Version "+ affectedVersion.getName() + " file " +file);
                 if(affectedVersion.getClasses().replace(file,true) == null){
                     setOriginalFile(affectedVersion,file);
                 }
-                else System.out.println(file);
             }
         }
     }
@@ -44,7 +44,7 @@ public class DataCalculator {
             // Vedo qual'è la versione del file presente nella release
             for(String oldFile: renamed.get(file)){
                 if(release.getClasses().replace(oldFile,true) != null){
-                    System.out.println(oldFile);
+
                     break;
                 }
             }
@@ -54,7 +54,7 @@ public class DataCalculator {
             for(List<String> files: renamed.values()){
                 for(String oldFile: files){
                     if(release.getClasses().replace(oldFile,true) != null){
-                        System.out.println(oldFile);
+
                         break;
                     }
                 }

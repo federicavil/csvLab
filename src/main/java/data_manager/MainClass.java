@@ -1,5 +1,7 @@
 package data_manager;
 
+import csv.CsvCreator;
+import csv.CsvFile;
 import model.Commit;
 import model.Issue;
 import model.Release;
@@ -34,6 +36,9 @@ public class MainClass {
             DataPreparer.commitsIssuesLinkage(commits,issues);
             // Calcolo la bugginess delle classi
             DataCalculator.calculateBugginess(releases,issues);
+            //Creo il file csv
+            CsvCreator file = new CsvCreator("bugginess.csv",new String[]{"Release","Class","Bugginess"});
+            file.writeDataOnCsv(releases);
 
         } catch (IOException | ParseException e) {
             e.printStackTrace();

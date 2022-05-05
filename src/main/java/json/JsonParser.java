@@ -105,6 +105,7 @@ public class JsonParser {
             }
             line = reader.readLine();
         }
+
         return commits;
     }
 

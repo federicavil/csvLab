@@ -4,85 +4,86 @@ import model.Commit;
 import model.Issue;
 import model.Release;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DataPreparer {
+    private List<Commit> commits;
+    private List<Release> releases;
+    private List<Issue> issues;
 
-    private DataPreparer(){
-        throw new IllegalStateException("Utility class");
+
+    public DataPreparer(List<Commit> commits, List<Release> releases, List<Issue> issues){
+        this.commits = commits;
+        this.releases = releases;
+        this.issues = issues;
     }
 
-    public static void releaseClassesLinkage(List<Commit> commits, List<Release> releases){
-        int j = commits.size()-1;
+    public List<Release> releaseClassesLinkage(){
+        int j = this.commits.size()-1;
         Commit currentCommit;
         Map<String, Boolean> classes = null;
         //Scorro tutte le releases in ordine cronologico crescente
-        for(int i = 0; i < releases.size(); i++){
+        for(int i = 0; i < this.releases.size(); i++){
             // Dalla seconda release in poi, questa avrà anche le classi della release precedente
             if(i > 0){
-              releases.get(i).getClasses().putAll(releases.get(i-1).getClasses());
+              this.releases.get(i).getClasses().putAll(this.releases.get(i-1).getClasses());
             }
             // Scorro tutti i commits in ordine cronologico crescente(quindi dalla fine)
             while(j >= 0){
-                currentCommit = commits.get(j);
-                if(currentCommit.getDate().before(releases.get(i).getReleasedDate())){
+                currentCommit = this.commits.get(j);
+                if(currentCommit.getDate().before(this.releases.get(i).getReleasedDate())){
                     // Il commit si riferisce alla release presa in considerazione
-                    updateReleaseClasses(releases.get(i),currentCommit);
+                    updateReleaseClasses(i,currentCommit);
                     j--;
                 }
                 else {
                    break;
                 }
             }
-
         }
+        return this.releases;
     }
 
-    private static void updateReleaseClasses(Release release, Commit commit){
+    private void updateReleaseClasses(int index, Commit commit){
         // Aggiunge o elimina le classe da una determinata release
         for(String file: commit.getClassAdded()){
-            release.getClasses().put(file, false);
+            this.releases.get(index).getClasses().put(file, false);
         }
         for(String file: commit.getClassDeleted()){
-            release.getClasses().remove(file);
+            this.releases.get(index).getClasses().remove(file);
         }
     }
 
-    public static void commitsIssuesLinkage(List<Commit> commits, List<Issue> issues){
-        List<Commit> commitToRemove = new ArrayList<>();
-        for(Commit commit: commits){
+    public List<Issue> commitsIssuesLinkage(){
+        for(Commit commit: this.commits){
             if(isUseful(commit)){
                 if(!commit.getIssues().isEmpty())
-                    linkToIssue(commit,issues);
+                    linkToIssue(commit);
             }
-            else commitToRemove.add(commit);
         }
-        commits.removeAll(commitToRemove);
         List<Issue> issueToRemove = new ArrayList<>();
-        for(Issue issue: issues){
+        for(Issue issue: this.issues){
             if(issue.getRelatedCommits().isEmpty())
                 issueToRemove.add(issue);
         }
-        issues.removeAll(issueToRemove);
+        this.issues.removeAll(issueToRemove);
+        return this.issues;
     }
 
-    public static boolean isUseful(Commit commit){
+    public boolean isUseful(Commit commit){
         if (commit.getClassModified().isEmpty() && commit.getClassAdded().isEmpty() && commit.getClassDeleted().isEmpty())
             return false;
         else return true;
     }
 
-    private static void linkToIssue(Commit commit, List<Issue> issues){
+    private void linkToIssue(Commit commit){
         for(String issueCommit: commit.getIssues()) {
-            for (int i = 0; i < issues.size();i++) {
-                if(issues.get(i).getkey().compareTo(issueCommit) == 0){
-                    issues.get(i).getRelatedCommits().add(commit);
+            for (int i = 0; i < this.issues.size();i++) {
+                if(this.issues.get(i).getkey().compareTo(issueCommit) == 0){
+                    this.issues.get(i).getRelatedCommits().add(commit);
                 }
             }
         }
 
     }
-
 }

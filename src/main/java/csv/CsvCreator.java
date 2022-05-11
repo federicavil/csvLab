@@ -17,11 +17,22 @@ public class CsvCreator {
 
     public void writeDataOnCsv(List<Release> releases) throws IOException {
         List<String[]> data = new ArrayList<>();
+        System.out.println("DATI");
+        Boolean isBuggy = null;
+        int counter = 0;
         for(Release release: releases){
             for(String className: release.getClasses().keySet()){
-                data.add(new String[] {release.getName(), className, release.getClasses().get(className).toString()});
+                isBuggy = release.getClasses().get(className);
+                data.add(new String[] {release.getName(), className, isBuggy.toString() });
+                if(isBuggy){
+                    counter++;
+                    System.out.println(release.getName() + " "+className);
+                }
             }
         }
         this.file.addData(data);
+        this.file.closeFile();
+        System.out.println("SCRITTE " + counter);
     }
+
 }

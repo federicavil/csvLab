@@ -6,7 +6,7 @@ import java.util.List;
 public class RenamedClassesList {
 
     private static RenamedClassesList instance = null;
-    private static HashMap<String,List<String>> renamedClasses;
+    private static HashMap<String,String> renamedClasses;
 
     private RenamedClassesList(){
         renamedClasses = new HashMap<>();
@@ -19,7 +19,7 @@ public class RenamedClassesList {
         return instance;
     }
 
-    public HashMap<String, List<String>> getRenamedClasses(){
+    public HashMap<String, String> getRenamedClasses(){
         return renamedClasses;
     }
 

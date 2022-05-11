@@ -49,7 +49,6 @@ public class JsonParser {
             issue.setAffectedVersions(affectedVersions);
             issues.add(issue);
         }
-
         return issues;
     }
 
@@ -61,11 +60,11 @@ public class JsonParser {
             release.setName((String)obj.get("name"));
             try {
                 release.setReleasedDate(stringToDate((String)obj.get("releaseDate")));
+                if((Boolean)obj.get("released"))
+                    releases.add(release);
             } catch (JSONException e) {
-                release.setReleasedDate(null);
-
+               continue;
             }
-            releases.add(release);
         }
         return releases;
     }
@@ -154,16 +153,6 @@ public class JsonParser {
     private static void updateRenameFiles(Commit commit, String oldFile, String newFile){
         commit.addClassDeleted(oldFile);
         commit.addClassAdded(newFile);
-        HashMap<String, List<String>> renamed = RenamedClassesList.getInstance().getRenamedClasses();
-        List<String> newRename = renamed.get(oldFile);
-        if(newRename == null){
-            newRename = new ArrayList<>();
-        }
-        else{
-            RenamedClassesList.getInstance().getRenamedClasses().remove(oldFile);
-        }
-        newRename.add(oldFile);
-        RenamedClassesList.getInstance().getRenamedClasses().put(newFile, newRename);
-
+        RenamedClassesList.getInstance().getRenamedClasses().put(newFile,oldFile);
     }
 }

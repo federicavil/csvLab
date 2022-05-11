@@ -5,69 +5,107 @@ import model.Issue;
 import model.Release;
 import model.RenamedClassesList;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class DataCalculator {
+    static int counter1 = 0;
+    static int counter2 = 0;
+    static int modified = 0;
 
-    public static void calculateBugginess(List<Release> releases, List<Issue> issues){
-        for(Issue issue: issues){
+    private List<Release> releases;
+    private List<Issue> issues;
+    private int proportion = 0;
+
+    public DataCalculator(List<Issue> issues, List<Release> releases){
+        this.issues = issues;
+        this.releases = releases;
+    }
+
+    public List<Release> calculateBugginess(){
+        for(Issue issue: this.issues){
+            // Controllo se l'issue ha associati dei commit
             if(!issue.getRelatedCommits().isEmpty()){
+                // Controllo se le AV già indicate sono consistenti
+                consistencyCheckAV(issue);
+                // Controllo se è già stata indicata l'AV
                 if(!issue.getAffectedVersions().isEmpty()){
-                    assignBugginess(issue, releases);
+                    //Assegno la bugginess alle affected versions
+                    assignBugginess(issue);
+                    updateProportion();
                 }
                 else {
+                    // Calcolo l'AV tramite le features
                     calculateAffectedVersion();
                 }
             }
         }
+        System.out.println("Calcolate " + counter1 +" " +counter2);
+        System.out.println("Classi modificate "+modified);
+
+        return this.releases;
     }
 
-    private static void calculateAffectedVersion(){
+    private static void updateProportion(){
 
     }
 
-    private static void updateClassBugginess(Release affectedVersion, List<Commit> relatedCommit){
+    private void consistencyCheckAV(Issue issue){
+        // Controlla se nelle AV c'è indicata anche la FV e in caso la rimuove
+        List<Release> affectedVersions =  new ArrayList<>();
+        for(Release version: issue.getAffectedVersions()){
+            if (!version.getReleasedDate().after(issue.getFixDate())){
+                affectedVersions.add(version);
+            }
+        }
+        issue.setAffectedVersions(affectedVersions);
+    }
+
+    private void calculateAffectedVersion(){
+        // Tramite proportion incrementale
+
+    }
+
+    private void updateClassBugginess(Release affectedVersion, List<Commit> relatedCommit){
         for(Commit commit: relatedCommit){
+            modified += commit.getClassModified().size();
+            //Prendo i file modificati da ogni commit che si riferisce alla issue considerata
             for(String file: commit.getClassModified()){
-                System.out.println("Version "+ affectedVersion.getName() + " file " +file);
-                if(affectedVersion.getClasses().replace(file,true) == null){
+                // Controllo se il file non è presente nell'elenco delle classi della release
+                if(!affectedVersion.getClasses().containsKey(file)){
+                    //Controllo se aveva un nome diverso nella release
                     setOriginalFile(affectedVersion,file);
+                }
+                else {
+                    // Aggiorno la bugginess
+                    affectedVersion.getClasses().replace(file,true);
+                    counter1++;
                 }
             }
         }
     }
 
-    private static void setOriginalFile(Release release, String file){
-        HashMap<String, List<String>> renamed = RenamedClassesList.getInstance().getRenamedClasses();
-        if(renamed.get(file) != null){
-            // Vedo qual'è la versione del file presente nella release
-            for(String oldFile: renamed.get(file)){
-                if(release.getClasses().replace(oldFile,true) != null){
+    private void setOriginalFile(Release release, String file){
+        HashMap<String, String> renamed = RenamedClassesList.getInstance().getRenamedClasses();
+        String oldFile = renamed.get(file);
+        while(oldFile != null && !release.getClasses().containsKey(oldFile)){
+            oldFile = renamed.get(oldFile);
+        }
+        if(oldFile != null){
+            release.getClasses().replace(oldFile,true);
+        }
+    }
 
+    private void assignBugginess(Issue issue){
+        for(Release affectedVersion: issue.getAffectedVersions()) {
+            for(Release release: this.releases){
+                if (release.getName().equals(affectedVersion.getName())) {
+                    // Se sto considerando l'affected version aggiorno la bugginess
+                    updateClassBugginess(release, issue.getRelatedCommits());
                     break;
                 }
             }
-        }
-        else{
-            //controllo per ogni lista se c'è il file
-            for(List<String> files: renamed.values()){
-                for(String oldFile: files){
-                    if(release.getClasses().replace(oldFile,true) != null){
-
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    private static void assignBugginess(Issue issue, List<Release> releases){
-        for(Release release: releases){
-            for(Release affectedVersion: issue.getAffectedVersions())
-                if(release.getName().equals(affectedVersion.getName())){
-                    updateClassBugginess(release,issue.getRelatedCommits());
-                }
         }
     }
 

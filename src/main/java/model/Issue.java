@@ -10,6 +10,8 @@ public class Issue {
     private String key;
     private Date creationDate;
     private Date fixDate;
+    private Release openingVersion;
+    private Release fixVersion;
     private List<Release> affectedVersions;
     private List<Commit> relatedCommits;
 
@@ -64,4 +66,19 @@ public class Issue {
         this.affectedVersions = affectedVersions;
     }
 
+    public Release getOpeningVersion() {
+        return openingVersion;
+    }
+
+    public void setOpeningVersion(Release openingVersion) {
+        this.openingVersion = openingVersion;
+    }
+
+    public Release getFixVersion() {
+        return fixVersion;
+    }
+
+    public void setFixVersion(Release fixVersion) {
+        this.fixVersion = fixVersion;
+    }
 }

@@ -23,10 +23,13 @@ public class DataRetriever {
         this.projectLocation = projectLocation;
         this.branch = branch;
     }
+    public DataRetriever(String projectName){
+        this.projectname = projectName;
+    }
 
     public List<Issue> retrieveIssues() throws IOException, ParseException {
         int i = 0;
-        int j = 0;
+        int j;
         int total = 1;
         String url;
         List<Issue> issues = new ArrayList<>();
@@ -36,9 +39,9 @@ public class DataRetriever {
                     + this.projectname + "%22AND%22issueType%22=%22Bug%22AND(%22status%22=%22closed%22OR"
                     + "%22status%22=%22resolved%22)AND%22resolution%22=%22fixed%22&fields=key,resolutiondate,versions,created&startAt=" + i+ "&maxResults=" + j;
             JSONObject jsonResult = JsonReader.readJsonFromUrl(url);
-            issues = JsonParser.getIssues(jsonResult);
+            issues.addAll(JsonParser.getIssues(jsonResult));
             total = jsonResult.getInt("total");
-            i = j+1;
+            i = j;
         }
         return issues;
     }
@@ -56,6 +59,6 @@ public class DataRetriever {
         Process p = builder.start();
         BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
         return JsonParser.getCommits(r,this.projectname);
-
     }
+
 }

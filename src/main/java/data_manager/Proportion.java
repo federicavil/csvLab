@@ -1,0 +1,60 @@
+package data_manager;
+
+import model.Issue;
+import model.Project;
+import model.Release;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+
+public class Proportion {
+
+    public static Double coldStart() throws IOException, ParseException {
+        List<Double> allProjectProportion = new ArrayList<>();
+
+        Project[] projects = Project.values();
+        for(Project project: projects){
+            // Prendo le issue del progetto
+            ProjectManager manager = new ProjectManager(project.toString());
+            List<Issue> issues = manager.getIssueInfo();
+            HashMap<String, Integer> releasesMap = generateReleaseMap(manager.getReleases());
+            allProjectProportion.add(calculateProportion(issues, releasesMap));
+        }
+
+        Collections.sort(allProjectProportion);
+        return allProjectProportion.get(allProjectProportion.size()/2);
+    }
+
+    public static Double calculateProportion(List<Issue> issues, HashMap<String, Integer> releasesMap){
+        Double sum = 0.0;
+        Double denominator = 0.0;
+        for(Issue issue: issues){
+            if(!issue.getAffectedVersions().isEmpty()){
+                Integer fixVersion = releasesMap.get(issue.getFixVersion().getName());
+                Integer openingVersion = releasesMap.get(issue.getOpeningVersion().getName());
+                Integer injectedVersion = releasesMap.get(issue.getAffectedVersions().get(0).getName());
+                if(fixVersion-openingVersion != 0)
+                    sum = sum +((fixVersion-injectedVersion)/(fixVersion-openingVersion));
+                else
+                    sum = sum +(fixVersion-injectedVersion);
+                denominator = denominator + 1.0;
+            }
+        }
+        if(denominator != 0.0)
+            return sum/denominator;
+        else return 0.0;
+    }
+
+    public static HashMap<String, Integer> generateReleaseMap(List<Release> releases){
+        HashMap<String, Integer> releasesMap = new HashMap<>();
+        for(int i = 0; i < releases.size(); i++){
+            releasesMap.put(releases.get(i).getName(),i+1);
+        }
+        return releasesMap;
+    }
+}
+

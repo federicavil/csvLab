@@ -7,8 +7,10 @@ import java.util.Map;
 public class Release {
 
     private String name;
+    private String sha_code;
     private Date releasedDate;
-    private Map<String, Boolean> classes;
+    private Map<String, Boolean> classBugginess;
+
 
     public Release(String name, Date releasedDate) {
         this.name = name;
@@ -16,7 +18,7 @@ public class Release {
     }
 
     public Release() {
-        this.classes = new HashMap<>();
+        this.classBugginess = new HashMap<>();
     }
 
     public String getName() {
@@ -35,12 +37,19 @@ public class Release {
         this.releasedDate = releasedDate;
     }
 
-    public Map<String, Boolean> getClasses() {
-        return classes;
+    public Map<String, Boolean> getClassBugginess() {
+        return classBugginess;
     }
 
-    public void setClasses(Map<String, Boolean> classes) {
-        this.classes = classes;
+    public void setClassBugginess(Map<String, Boolean> classBugginess) {
+        this.classBugginess = classBugginess;
     }
 
+    public String getSha_code() {
+        return sha_code;
+    }
+
+    public void setSha_code(String sha_code) {
+        this.sha_code = sha_code;
+    }
 }

@@ -21,8 +21,8 @@ public class CsvCreator {
         Boolean isBuggy = null;
         int counter = 0;
         for(Release release: releases){
-            for(String className: release.getClasses().keySet()){
-                isBuggy = release.getClasses().get(className);
+            for(String className: release.getClassBugginess().keySet()){
+                isBuggy = release.getClassBugginess().get(className);
                 data.add(new String[] {release.getName(), className, isBuggy.toString() });
                 if(isBuggy){
                     counter++;

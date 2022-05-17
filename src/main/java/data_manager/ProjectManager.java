@@ -6,6 +6,7 @@ import model.Release;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -32,8 +33,7 @@ public class ProjectManager {
     }
 
     public List<Issue> getIssues() throws IOException, ParseException {
-        List<Issue> issues = this.retriever.retrieveIssues();
-        return issues;
+        return this.retriever.retrieveIssues();
     }
 
     public List<Release> getReleases() throws IOException, ParseException {
@@ -74,12 +74,12 @@ public class ProjectManager {
             this.releases = this.releases.subList(0,this.releases.size()/2);
 
         } catch (IOException | ParseException e) {
-            return null;
+            return new ArrayList<>();
         }
         return this.releases;
     }
 
-    public List<Release> getFeatures() throws IOException, InterruptedException {
+    public List<Release> getFeatures() throws  InterruptedException {
         // Calcolo le features
         FeatureCalculator featureCalculator = new FeatureCalculator(this.releases, this.projectName, this.projectLocation);
         // LOC

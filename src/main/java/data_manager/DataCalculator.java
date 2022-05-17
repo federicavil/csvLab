@@ -39,7 +39,7 @@ public class DataCalculator {
 
     private void calculateAffectedVersion(Double proportion, int index){
         Issue issue = this.issues.get(index);
-        HashMap<String, Integer> releaseMap = Proportion.generateReleaseMap(this.releases);
+        HashMap<String, Integer> releaseMap = (HashMap<String, Integer>) Proportion.generateReleaseMap(this.releases);
         Integer fixVersion = releaseMap.get(issue.getFixVersion().getName());
         Integer openingVersion = releaseMap.get(issue.getOpeningVersion().getName());
         Integer injectedVersion = (int)Math.round(fixVersion-(fixVersion-openingVersion)*proportion);
@@ -72,7 +72,7 @@ public class DataCalculator {
 
     private void setOriginalFile(Release release, String file){
         //System.out.println("CERCO IL CAZZO DI FILE");
-        HashMap<String, String> renamed = RenamedClassesList.getInstance().getRenamedClasses();
+        HashMap<String, String> renamed = (HashMap<String, String>) RenamedClassesList.getInstance().getRenamedClasses();
         String newFile = renamed.get(file);
         while(newFile != null && !release.getClasses().containsKey(newFile)){
             newFile = renamed.get(newFile);

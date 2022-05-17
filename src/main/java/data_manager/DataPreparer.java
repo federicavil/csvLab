@@ -54,12 +54,12 @@ public class DataPreparer {
         HashMap<String, JavaClassFile> newClasses = new HashMap<>();
         for(String name: classes.keySet()){
            JavaClassFile classFile = classes.get(name);
-           List<Commit> commits = new ArrayList<>();
+           List<Commit> newCommits = new ArrayList<>();
            for(Commit commit: classFile.getFullHistory()){
-               commits.add(new Commit(commit.getId(),commit.getAuthor(),commit.getDate(),commit.getIssues(),commit.getClassAdded(),
+               newCommits.add(new Commit(commit.getId(),commit.getAuthor(),commit.getDate(),commit.getIssues(),commit.getClassAdded(),
                             commit.getClassModified(),commit.getClassDeleted()));
            }
-           newClasses.put(name, new JavaClassFile(name, classFile.isBuggy(), commits));
+           newClasses.put(name, new JavaClassFile(name, classFile.isBuggy(), newCommits));
         }
         this.releases.get(index).setClasses(newClasses);
     }

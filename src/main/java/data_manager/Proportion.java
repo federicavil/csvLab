@@ -6,12 +6,13 @@ import model.Release;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class Proportion {
+
+    private Proportion() {
+        throw new IllegalStateException("Utility class");
+    }
 
     public static Double coldStart() throws IOException, ParseException {
         List<Double> allProjectProportion = new ArrayList<>();
@@ -21,7 +22,7 @@ public class Proportion {
             // Prendo le issue del progetto
             ProjectManager manager = new ProjectManager(project.toString());
             List<Issue> issues = manager.getIssueInfo();
-            HashMap<String, Integer> releasesMap = generateReleaseMap(manager.getReleases());
+            HashMap<String, Integer> releasesMap = (HashMap<String, Integer>) generateReleaseMap(manager.getReleases());
             allProjectProportion.add(calculateProportion(issues, releasesMap));
         }
 
@@ -29,7 +30,7 @@ public class Proportion {
         return allProjectProportion.get(allProjectProportion.size()/2);
     }
 
-    public static Double calculateProportion(List<Issue> issues, HashMap<String, Integer> releasesMap){
+    public static Double calculateProportion(List<Issue> issues, Map<String, Integer> releasesMap){
         Double sum = 0.0;
         Double denominator = 0.0;
         for(Issue issue: issues){
@@ -49,7 +50,7 @@ public class Proportion {
         else return 0.0;
     }
 
-    public static HashMap<String, Integer> generateReleaseMap(List<Release> releases){
+    public static Map<String, Integer> generateReleaseMap(List<Release> releases){
         HashMap<String, Integer> releasesMap = new HashMap<>();
         for(int i = 0; i < releases.size(); i++){
             releasesMap.put(releases.get(i).getName(),i+1);

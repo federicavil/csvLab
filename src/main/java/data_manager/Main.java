@@ -20,7 +20,7 @@ public class Main {
         ProjectManager manager = new ProjectManager(PROJECTNAME, PROJECTLOCATION);
         // Prendo i dati sulla bugginess delle classi in ogni release
         List<Release> releases = manager.getBugginess(proportion);
-        if(releases == null){
+        if(releases.isEmpty()){
             System.out.println("PROBLEMA");
         }
         System.out.println("Calcolata bugginess");

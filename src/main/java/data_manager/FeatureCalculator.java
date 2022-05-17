@@ -55,7 +55,7 @@ public class FeatureCalculator {
             this.file = file;
             this.commit = commit;
         }
-
+        @Override
         public void run() {
             List<String> lines;
             try {

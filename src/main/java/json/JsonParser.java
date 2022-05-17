@@ -63,8 +63,7 @@ public class JsonParser {
                 release.setReleasedDate(stringToDate((String)obj.get("releaseDate")));
                 //if((Boolean)obj.get("released"))
                     releases.add(release);
-            } catch (JSONException e) {
-               continue;
+            } catch (JSONException ignored) {
             }
         }
         return releases;

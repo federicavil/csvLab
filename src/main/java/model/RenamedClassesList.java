@@ -1,15 +1,14 @@
 package model;
 
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 public class RenamedClassesList {
 
     private static RenamedClassesList instance = null;
-    private static HashMap<String,String> renamedClasses;
+    private static HashMap<String,String> renamedClasses = new HashMap<>();
 
     private RenamedClassesList(){
-        renamedClasses = new HashMap<>();
     }
 
     public static RenamedClassesList getInstance(){
@@ -19,7 +18,7 @@ public class RenamedClassesList {
         return instance;
     }
 
-    public HashMap<String, String> getRenamedClasses(){
+    public Map<String, String> getRenamedClasses(){
         return renamedClasses;
     }
 

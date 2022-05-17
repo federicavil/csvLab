@@ -10,9 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class DataCalculator {
-    static int counter1 = 0;
-    static int counter2 = 0;
-    static int modified = 0;
 
     private List<Release> releases;
     private List<Issue> issues;
@@ -58,35 +55,33 @@ public class DataCalculator {
 
     private void updateClassBugginess(Release affectedVersion, List<Commit> relatedCommit){
         for(Commit commit: relatedCommit){
-            modified += commit.getClassModified().size();
             //Prendo i file modificati da ogni commit che si riferisce alla issue considerata
             for(String file: commit.getClassModified()){
                 // Controllo se il file non è presente nell'elenco delle classi della release
-                if(!affectedVersion.getClassBugginess().containsKey(file)){
+                if(!affectedVersion.getClasses().containsKey(file)){
                     //Controllo se aveva un nome diverso nella release
                     setOriginalFile(affectedVersion,file);
                 }
                 else {
                     // Aggiorno la bugginess
-                    affectedVersion.getClassBugginess().replace(file,true);
-                    counter1++;
+                    affectedVersion.getClasses().get(file).setBugginess(true);
                 }
             }
         }
     }
 
     private void setOriginalFile(Release release, String file){
-        System.out.println("CERCO IL CAZZO DI FILE");
+        //System.out.println("CERCO IL CAZZO DI FILE");
         HashMap<String, String> renamed = RenamedClassesList.getInstance().getRenamedClasses();
         String newFile = renamed.get(file);
-        while(newFile != null && !release.getClassBugginess().containsKey(newFile)){
+        while(newFile != null && !release.getClasses().containsKey(newFile)){
             newFile = renamed.get(newFile);
         }
         if(newFile != null){
-            release.getClassBugginess().replace(newFile,true);
-            System.out.println("TROVATO");
+            release.getClasses().get(newFile).setBugginess(true);
+            //System.out.println("TROVATO");
         }
-        else System.out.println("NON HO TROVATO IL CAZZO DI FILE");
+        //else System.out.println("NON HO TROVATO IL CAZZO DI FILE");
     }
 
     private void assignBugginess(Issue issue){

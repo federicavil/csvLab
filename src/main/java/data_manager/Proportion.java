@@ -38,7 +38,7 @@ public class Proportion {
                 Integer openingVersion = releasesMap.get(issue.getOpeningVersion().getName());
                 Integer injectedVersion = releasesMap.get(issue.getAffectedVersions().get(0).getName());
                 if(fixVersion-openingVersion != 0)
-                    sum = sum +((fixVersion-injectedVersion)/(fixVersion-openingVersion));
+                    sum = sum +((double)(fixVersion-injectedVersion)/(fixVersion-openingVersion));
                 else
                     sum = sum +(fixVersion-injectedVersion);
                 denominator = denominator + 1.0;

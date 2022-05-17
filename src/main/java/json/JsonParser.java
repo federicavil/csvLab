@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class JsonParser {
 
@@ -154,5 +155,10 @@ public class JsonParser {
         commit.addClassDeleted(oldFile);
         commit.addClassAdded(newFile);
         RenamedClassesList.getInstance().getRenamedClasses().put(oldFile,newFile);
+    }
+
+    public static List<String> getFileContent(BufferedReader reader) {
+        Stream<String> lines = reader.lines();
+        return lines.toList();
     }
 }

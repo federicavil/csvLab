@@ -2,6 +2,7 @@ package data_manager;
 
 import model.Commit;
 import model.Issue;
+import model.JavaClassFile;
 import model.Release;
 
 import java.util.*;
@@ -10,7 +11,6 @@ public class DataPreparer {
     private List<Commit> commits;
     private List<Release> releases;
     private List<Issue> issues;
-    private int counter = 0;
 
 
     public DataPreparer(List<Commit> commits, List<Release> releases, List<Issue> issues){
@@ -26,16 +26,16 @@ public class DataPreparer {
 
     public List<Release> releaseClassesLinkage(){
         int j = this.commits.size()-1;
-        Commit currentCommit;
+        int i = 0;
         //Scorro tutte le releases in ordine cronologico crescente
-        for(int i = 0; i < this.releases.size(); i++){
+        for(i = 0; i < this.releases.size(); i++){
             // Dalla seconda release in poi, questa avrà anche le classi della release precedente
             if(i > 0){
-              this.releases.get(i).getClassBugginess().putAll(this.releases.get(i-1).getClassBugginess());
+                copyPreviousClasses(i);
             }
             // Scorro tutti i commits in ordine cronologico crescente(quindi dalla fine)
             while(j >= 0){
-                currentCommit = this.commits.get(j);
+                Commit currentCommit = this.commits.get(j);
                 if(currentCommit.getDate().before(this.releases.get(i).getReleasedDate())){
                     // Il commit si riferisce alla release presa in considerazione
                     updateReleaseClasses(i,currentCommit);
@@ -49,13 +49,42 @@ public class DataPreparer {
         return this.releases;
     }
 
+    private void copyPreviousClasses(int index){
+        HashMap<String, JavaClassFile> classes = this.releases.get(index -1).getClasses();
+        HashMap<String, JavaClassFile> newClasses = new HashMap<>();
+        for(String name: classes.keySet()){
+           JavaClassFile classFile = classes.get(name);
+           List<Commit> commits = new ArrayList<>();
+           for(Commit commit: classFile.getFullHistory()){
+               commits.add(new Commit(commit.getId(),commit.getAuthor(),commit.getDate(),commit.getIssues(),commit.getClassAdded(),
+                            commit.getClassModified(),commit.getClassDeleted()));
+           }
+           newClasses.put(name, new JavaClassFile(name, classFile.isBuggy(), commits));
+        }
+        this.releases.get(index).setClasses(newClasses);
+    }
+
     private void updateReleaseClasses(int index, Commit commit){
+        Release release = this.releases.get(index);
         // Aggiunge o elimina le classe da una determinata release
         for(String file: commit.getClassAdded()){
-            this.releases.get(index).getClassBugginess().put(file, false);
+            JavaClassFile javaClass = new JavaClassFile(file, false);
+            javaClass.addRelatedCommit(commit);
+            javaClass.addToFullHistory(commit);
+            release.getClasses().put(file, javaClass);
+
         }
         for(String file: commit.getClassDeleted()){
-            this.releases.get(index).getClassBugginess().remove(file);
+            release.getClasses().remove(file);
+        }
+
+        for(String file: commit.getClassModified()){
+            if(release.getClasses().get(file) != null) {
+                release.getClasses().get(file).addRelatedCommit(commit);
+                release.getClasses().get(file).addToFullHistory(commit);
+            }
+
+
         }
     }
 
@@ -98,8 +127,6 @@ public class DataPreparer {
                 toRemove.add(issue);
             }
         }
-        System.out.println("RIMOSSE: "+ toRemove.size());
-        System.out.println("CONTROLLO: "+ counter);
 
         this.issues.removeAll(toRemove);
 

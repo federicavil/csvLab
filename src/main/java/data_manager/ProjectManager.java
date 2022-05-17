@@ -72,10 +72,19 @@ public class ProjectManager {
 
             //elimino la metà delle release per lo snoring
             this.releases = this.releases.subList(0,this.releases.size()/2);
+
         } catch (IOException | ParseException e) {
             return null;
         }
         return this.releases;
     }
 
+    public List<Release> getFeatures() throws IOException, InterruptedException {
+        // Calcolo le features
+        FeatureCalculator featureCalculator = new FeatureCalculator(this.releases, this.projectName, this.projectLocation);
+        // LOC
+        this.releases = featureCalculator.calculateLOC();
+        this.releases = featureCalculator.calculateNumberOfRevisions();
+        return this.releases;
+    }
 }

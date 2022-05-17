@@ -27,6 +27,11 @@ public class DataRetriever {
         this.projectname = projectName;
     }
 
+    public DataRetriever(String projectName, String projectLocation){
+        this.projectname = projectName;
+        this.projectLocation = projectLocation;
+    }
+
     public List<Issue> retrieveIssues() throws IOException, ParseException {
         int i = 0;
         int j;
@@ -59,6 +64,15 @@ public class DataRetriever {
         Process p = builder.start();
         BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
         return JsonParser.getCommits(r,this.projectname);
+    }
+
+    public List<String> retrieveFileContent(Commit commit, String filePath) throws IOException {
+        ProcessBuilder builder = new ProcessBuilder(
+                "cmd.exe", "/c", "cd " + this.projectLocation+ " && git show "+commit.getId()+":"+filePath);
+        builder.redirectErrorStream(true);
+        Process p = builder.start();
+        BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        return JsonParser.getFileContent(r);
     }
 
 }

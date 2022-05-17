@@ -2,15 +2,12 @@ package model;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 public class Release {
 
     private String name;
-    private String sha_code;
     private Date releasedDate;
-    private Map<String, Boolean> classBugginess;
-
+    private HashMap<String, JavaClassFile> classes;
 
     public Release(String name, Date releasedDate) {
         this.name = name;
@@ -18,7 +15,7 @@ public class Release {
     }
 
     public Release() {
-        this.classBugginess = new HashMap<>();
+        this.classes = new HashMap<>();
     }
 
     public String getName() {
@@ -37,19 +34,12 @@ public class Release {
         this.releasedDate = releasedDate;
     }
 
-    public Map<String, Boolean> getClassBugginess() {
-        return classBugginess;
+    public HashMap<String, JavaClassFile> getClasses() {
+        return classes;
     }
 
-    public void setClassBugginess(Map<String, Boolean> classBugginess) {
-        this.classBugginess = classBugginess;
+    public void setClasses(HashMap<String, JavaClassFile> classes) {
+        this.classes = classes;
     }
 
-    public String getSha_code() {
-        return sha_code;
-    }
-
-    public void setSha_code(String sha_code) {
-        this.sha_code = sha_code;
-    }
 }

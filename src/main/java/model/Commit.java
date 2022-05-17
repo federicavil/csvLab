@@ -11,7 +11,6 @@ public class Commit {
     private Set<String> classAdded;
     private Set<String> classModified;
     private Set<String> classDeleted;
-    private Set<String> classRenamed;
 
     public Commit() {
         this.author = null;
@@ -20,6 +19,16 @@ public class Commit {
         this.classAdded = new HashSet<>();
         this.classModified = new HashSet<>();
         this.classDeleted = new HashSet<>();
+    }
+
+    public Commit(String id, String author, Date date, Set<String> issuesId,Set<String> classAdded,Set<String> classDeleted, Set<String> classModified ) {
+        this.id = id;
+        this.author = author;
+        this.date = date;
+        this.issuesId = issuesId;
+        this.classAdded = classAdded;
+        this.classModified = classModified;
+        this.classDeleted = classDeleted;
     }
 
     public String getAuthor() {

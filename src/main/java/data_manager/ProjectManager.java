@@ -61,7 +61,9 @@ public class ProjectManager {
             commits = this.retriever.retrieveCommits();
             issues = this.getIssueInfo();
 
-            DataPreparer preparer = new DataPreparer(commits,this.releases,issues);
+            FeatureCalculator featureCalculator = new FeatureCalculator(this.releases, this.projectName, this.projectLocation);
+
+            DataPreparer preparer = new DataPreparer(commits,this.releases,issues, featureCalculator);
             // Determino le classi presenti nelle varie releases
             this.releases = preparer.releaseClassesLinkage();
             // Determino i commits relativi alle varie issues
@@ -73,18 +75,15 @@ public class ProjectManager {
             //elimino la metà delle release per lo snoring
             this.releases = this.releases.subList(0,this.releases.size()/2);
 
-        } catch (IOException | ParseException e) {
+            for(Release release: this.releases){
+                featureCalculator.calculateLOC(release);
+                System.out.println("calcolata");
+            }
+
+        } catch (IOException | ParseException | InterruptedException e) {
             return new ArrayList<>();
         }
         return this.releases;
     }
 
-    public List<Release> getFeatures() throws  InterruptedException {
-        // Calcolo le features
-        FeatureCalculator featureCalculator = new FeatureCalculator(this.releases, this.projectName, this.projectLocation);
-        // LOC
-        this.releases = featureCalculator.calculateLOC();
-        this.releases = featureCalculator.calculateNumberOfRevisions();
-        return this.releases;
-    }
 }

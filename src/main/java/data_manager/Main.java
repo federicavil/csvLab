@@ -11,22 +11,22 @@ import java.util.List;
 
 public class Main {
 
-    private static final String PROJECTNAME = "BOOKKEEPER";
-    private static final String PROJECTLOCATION = "C:/Users/Federica/git/bookkeeper_ml";
+    private static final String PROJECTNAME = "SYNCOPE";
+    private static final String PROJECTLOCATION = "C:/Users/Federica/git/syncope_ml";
 
     public static void main(String[] args) throws IOException, ParseException, InterruptedException {
         Double proportion = Proportion.coldStart();
-        //Double proportion = 0.0;
         ProjectManager manager = new ProjectManager(PROJECTNAME, PROJECTLOCATION);
         // Prendo i dati sulla bugginess delle classi in ogni release
+        Instant start = Instant.now();
         List<Release> releases = manager.getBugginess(proportion);
         if(releases.isEmpty()){
             System.out.println("PROBLEMA");
         }
         System.out.println("Calcolata bugginess");
         // Calcolo le features delle classi
-        Instant start = Instant.now();
-        releases = manager.getFeatures();
+
+        //releases = manager.getFeatures();
         Instant end = Instant.now();
         Duration timeElapsed = Duration.between(start, end);
         System.out.println("Time taken: "+ timeElapsed.toSeconds() +" seconds");

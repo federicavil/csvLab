@@ -5,18 +5,21 @@ import model.Issue;
 import model.JavaClassFile;
 import model.Release;
 
+import java.io.IOException;
 import java.util.*;
 
 public class DataPreparer {
     private List<Commit> commits;
     private List<Release> releases;
     private List<Issue> issues;
+    private FeatureCalculator calculator;
 
 
-    public DataPreparer(List<Commit> commits, List<Release> releases, List<Issue> issues){
+    public DataPreparer(List<Commit> commits, List<Release> releases, List<Issue> issues, FeatureCalculator calculator){
         this.commits = commits;
         this.releases = releases;
         this.issues = issues;
+        this.calculator = calculator;
     }
 
     public DataPreparer(List<Release> releases, List<Issue> issues){
@@ -24,7 +27,7 @@ public class DataPreparer {
         this.issues = issues;
     }
 
-    public List<Release> releaseClassesLinkage(){
+    public List<Release> releaseClassesLinkage() throws IOException, InterruptedException {
         int j = this.commits.size()-1;
         int i = 0;
         //Scorro tutte le releases in ordine cronologico crescente
@@ -45,6 +48,7 @@ public class DataPreparer {
                    break;
                 }
             }
+
         }
         return this.releases;
     }
@@ -59,7 +63,12 @@ public class DataPreparer {
                newCommits.add(new Commit(commit.getId(),commit.getAuthor(),commit.getDate(),commit.getIssues(),commit.getClassAdded(),
                             commit.getClassModified(),commit.getClassDeleted()));
            }
-           newClasses.put(name, new JavaClassFile(name, classFile.isBuggy(), newCommits));
+           Set<String> newAuthors = new HashSet<>();
+           for(String author:  classFile.getAuthors()){
+               newAuthors.add(author);
+           }
+           JavaClassFile newFile = new JavaClassFile(name, classFile.getCreationDate(), classFile.getAge(),classFile.isBuggy(), newCommits, newAuthors);
+           newClasses.put(name, newFile);
         }
         this.releases.get(index).setClasses(newClasses);
     }
@@ -68,11 +77,12 @@ public class DataPreparer {
         Release release = this.releases.get(index);
         // Aggiunge o elimina le classe da una determinata release
         for(String file: commit.getClassAdded()){
-            JavaClassFile javaClass = new JavaClassFile(file, false);
+            JavaClassFile javaClass = new JavaClassFile(file, commit.getDate(),false);
             javaClass.addRelatedCommit(commit);
             javaClass.addToFullHistory(commit);
             release.getClasses().put(file, javaClass);
-
+            calculator.updateFeatures(javaClass,commit);
+            calculator.calculateAge(javaClass,release.getReleasedDate());
         }
         for(String file: commit.getClassDeleted()){
             release.getClasses().remove(file);
@@ -80,11 +90,12 @@ public class DataPreparer {
 
         for(String file: commit.getClassModified()){
             if(release.getClasses().get(file) != null) {
-                release.getClasses().get(file).addRelatedCommit(commit);
-                release.getClasses().get(file).addToFullHistory(commit);
+                JavaClassFile javaClass = release.getClasses().get(file);
+                javaClass.addRelatedCommit(commit);
+                javaClass.addToFullHistory(commit);
+                calculator.updateFeatures(javaClass,commit);
+                calculator.calculateAge(javaClass,release.getReleasedDate());
             }
-
-
         }
     }
 

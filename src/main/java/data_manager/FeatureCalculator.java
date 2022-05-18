@@ -5,8 +5,8 @@ import model.JavaClassFile;
 import model.Release;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class FeatureCalculator {
 
@@ -24,42 +24,67 @@ public class FeatureCalculator {
         this.projectLocation = projectLocation;
     }
 
-    public List<Release> calculateLOC() throws InterruptedException {
-        List<LocThread> threads = new ArrayList<>();
-        for(Release release: this.releases){
-            for(JavaClassFile file: release.getClasses().values()){
-                LocThread t = new LocThread(file,file.getFullHistory().get(0));
-                threads.add(t);
-                t.start();
+    public void calculateLOC(Release release) throws IOException, InterruptedException {
+        JavaClassFile[] classes = release.getClasses().values().toArray(new JavaClassFile[0]);
+        DataRetriever retriever = new DataRetriever(projectName,projectLocation);
+
+        int nThread = 2000;
+        int i = 0;
+        while(i < classes.length){
+            List<LocThread> threads = new ArrayList<>();
+            for(int j = 0; j < nThread; j++){
+                if(i < classes.length){
+                    LocThread thread = new LocThread(classes[i],retriever);
+                    threads.add(thread);
+                    i++;
+                    thread.start();
+                }
+
+            }
+            for(LocThread thread: threads){
+                thread.join();
             }
         }
-        for(LocThread thread: threads)
-            thread.join();
 
-        return this.releases;
+
+
     }
 
-    public List<Release> calculateNumberOfRevisions(){
-        for(Release release: this.releases){
-            for(JavaClassFile file: release.getClasses().values()){
-                file.setNumberOfRevisions(file.getRelatedCommits().size());
-            }
+    public void updateFeatures(JavaClassFile javaClass, Commit commit){
+        javaClass.incrementNR();
+        javaClass.addAuthor(commit.getAuthor());
+        for(String file: commit.getClassAdded()){
+            javaClass.addToChgSet(file);
         }
-        return this.releases;
+        for(String file: commit.getClassModified()){
+            javaClass.addToChgSet(file);
+
+        }
     }
+
+    public void calculateAge(JavaClassFile javaClass, Date releaseDate){
+        long diffInMillies = Math.abs(releaseDate.getTime() - javaClass.getCreationDate().getTime());
+        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+        int weeks = (int)diff/7;
+        javaClass.setAge(weeks);
+
+    }
+
 
     class LocThread extends Thread {
-        private Commit commit;
         private JavaClassFile file;
-        LocThread(JavaClassFile file, Commit commit) {
+        private DataRetriever retriever;
+
+        LocThread(JavaClassFile file, DataRetriever retriever) {
             this.file = file;
-            this.commit = commit;
+            this.retriever = retriever;
         }
+
         @Override
         public void run() {
             List<String> lines;
             try {
-                lines = new DataRetriever(projectName,projectLocation).retrieveFileContent(commit,file.getName());
+                lines = retriever.retrieveFileContent(file.getFullHistory().get(0), file.getName());
                 file.setLoc(lines.size());
             } catch (IOException e) {
                 e.printStackTrace();

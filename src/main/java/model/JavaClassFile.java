@@ -1,29 +1,52 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class JavaClassFile {
 
     private String name;
+    private int age;
+    private Date creationDate;
     private int loc;
     private int numberOfRevisions;
+    private Set<String> authors;
     private List<Commit> relatedCommits;
     private List<Commit> fullHistory;
+    private Set<String> chgSet;
     private boolean bugginess;
 
-    public JavaClassFile(String name, boolean bugginess){
+    public JavaClassFile(String name,Date date,  boolean bugginess){
         this.bugginess = bugginess;
         this.name = name;
+        this.creationDate = date;
         this.relatedCommits = new ArrayList<>();
         this.fullHistory = new ArrayList<>();
+        this.authors = new HashSet<>();
+        this.numberOfRevisions = 0;
+        this.chgSet = new HashSet<>();
     }
 
-    public JavaClassFile(String name, boolean bugginess, List<Commit> totalCommits){
+    public JavaClassFile(String name, Date date, boolean bugginess, List<Commit> totalCommits){
         this.bugginess = bugginess;
         this.name = name;
+        this.creationDate = date;
         this.relatedCommits = new ArrayList<>();
         this.fullHistory = totalCommits;
+        this.authors = new HashSet<>();
+        this.numberOfRevisions = 0;
+        this.chgSet = new HashSet<>();
+    }
+
+    public JavaClassFile(String name, Date date, int age, boolean bugginess, List<Commit> totalCommits, Set<String> authors){
+        this.bugginess = bugginess;
+        this.name = name;
+        this.creationDate = date;
+        this.relatedCommits = new ArrayList<>();
+        this.fullHistory = totalCommits;
+        this.authors = authors;
+        this.numberOfRevisions = 0;
+        this.age = age;
+        this.chgSet = new HashSet<>();
     }
 
     public JavaClassFile(String name, boolean bugginess, List<Commit> commits, List<Commit> totalCommits){
@@ -31,6 +54,45 @@ public class JavaClassFile {
         this.name = name;
         this.relatedCommits = commits;
         this.fullHistory = totalCommits;
+        this.chgSet = new HashSet<>();
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public void setAge(int age){
+        this.age = age;
+    }
+
+    public int getAge(){
+        return this.age;
+    }
+
+    public int getAuthorsNumber(){
+        return this.authors.size();
+    }
+
+    public int getChgSetSize(){
+        return this.chgSet.size();
+    }
+
+    public void addToChgSet(String file){
+        this.chgSet.add(file);
+    }
+
+    public void addAuthor(String author){
+        this.authors.add(author);
+    }
+    public Set<String> getAuthors(){
+        return this.authors;
+    }
+    public void incrementNR(){
+        this.numberOfRevisions++;
     }
 
     public void addRelatedCommit(Commit commit){

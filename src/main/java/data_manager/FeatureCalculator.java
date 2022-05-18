@@ -45,21 +45,25 @@ public class FeatureCalculator {
                 thread.join();
             }
         }
-
-
-
     }
 
     public void updateFeatures(JavaClassFile javaClass, Commit commit){
         javaClass.incrementNR();
         javaClass.addAuthor(commit.getAuthor());
         for(String file: commit.getClassAdded()){
-            javaClass.addToChgSet(file);
+            if(!file.equals(javaClass.getName()))
+                javaClass.addToChgSet(file);
         }
         for(String file: commit.getClassModified()){
-            javaClass.addToChgSet(file);
-
+            if(!file.equals(javaClass.getName()))
+                javaClass.addToChgSet(file);
         }
+        int sumChg = commit.getClassAdded().size() + commit.getClassModified().size() -1;
+        if(sumChg > javaClass.getMaxChgSet())
+            javaClass.setMaxChgSet(sumChg);
+        int[] avgChgSet = javaClass.getAvgChgSet();
+        javaClass.getAvgChgSet()[0] = ((avgChgSet[1]*avgChgSet[0])+sumChg)/(avgChgSet[1]+1);
+        javaClass.getAvgChgSet()[1]++;
     }
 
     public void calculateAge(JavaClassFile javaClass, Date releaseDate){

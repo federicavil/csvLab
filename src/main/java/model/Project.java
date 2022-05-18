@@ -2,10 +2,10 @@ package model;
 
 public enum Project {
     AVRO,
-    BOOKKEEPER,
+    //BOOKKEEPER,
     OPENJPA,
     STORM,
     ZOOKEEPER,
-    //SYNCOPE,
+    SYNCOPE,
     TAJO
 }

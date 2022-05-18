@@ -13,6 +13,8 @@ public class JavaClassFile {
     private List<Commit> relatedCommits;
     private List<Commit> fullHistory;
     private Set<String> chgSet;
+    private int maxChgSet;
+    private int[] avgChgSet;
     private boolean bugginess;
 
     public JavaClassFile(String name,Date date,  boolean bugginess){
@@ -24,6 +26,8 @@ public class JavaClassFile {
         this.authors = new HashSet<>();
         this.numberOfRevisions = 0;
         this.chgSet = new HashSet<>();
+        this.maxChgSet = 0;
+        this.avgChgSet = new int[2];
     }
 
     public JavaClassFile(String name, Date date, boolean bugginess, List<Commit> totalCommits){
@@ -35,6 +39,8 @@ public class JavaClassFile {
         this.authors = new HashSet<>();
         this.numberOfRevisions = 0;
         this.chgSet = new HashSet<>();
+        this.maxChgSet = 0;
+        this.avgChgSet = new int[2];
     }
 
     public JavaClassFile(String name, Date date, int age, boolean bugginess, List<Commit> totalCommits, Set<String> authors){
@@ -47,6 +53,8 @@ public class JavaClassFile {
         this.numberOfRevisions = 0;
         this.age = age;
         this.chgSet = new HashSet<>();
+        this.maxChgSet = 0;
+        this.avgChgSet = new int[2];
     }
 
     public JavaClassFile(String name, boolean bugginess, List<Commit> commits, List<Commit> totalCommits){
@@ -55,6 +63,8 @@ public class JavaClassFile {
         this.relatedCommits = commits;
         this.fullHistory = totalCommits;
         this.chgSet = new HashSet<>();
+        this.maxChgSet = 0;
+        this.avgChgSet = new int[2];
     }
 
     public Date getCreationDate() {
@@ -77,12 +87,28 @@ public class JavaClassFile {
         return this.authors.size();
     }
 
+    public int getMaxChgSet(){
+        return this.maxChgSet;
+    }
+
+    public void setMaxChgSet(int max){
+        this.maxChgSet = max;
+    }
+
     public int getChgSetSize(){
         return this.chgSet.size();
     }
 
     public void addToChgSet(String file){
         this.chgSet.add(file);
+    }
+
+    public int[] getAvgChgSet(){
+        return this.avgChgSet;
+    }
+
+    public int getAvgSetSize(){
+        return this.avgChgSet[0];
     }
 
     public void addAuthor(String author){

@@ -67,22 +67,25 @@ public class DataPreparer {
            for(String author:  classFile.getAuthors()){
                newAuthors.add(author);
            }
-           JavaClassFile newFile = new JavaClassFile(name, classFile.getCreationDate(), classFile.getAge(),classFile.isBuggy(), newCommits, newAuthors);
+           JavaClassFile newFile = new JavaClassFile(name, classFile.getCreationDate(), classFile.getLoc(), classFile.getAge(),classFile.isBuggy(), newCommits, newAuthors);
            newClasses.put(name, newFile);
         }
         this.releases.get(index).setClasses(newClasses);
     }
 
-    private void updateReleaseClasses(int index, Commit commit){
+    private void updateReleaseClasses(int index, Commit commit) throws IOException, InterruptedException {
         Release release = this.releases.get(index);
+        List<LocThread> threads = new ArrayList<>();
         // Aggiunge o elimina le classe da una determinata release
         for(String file: commit.getClassAdded()){
             JavaClassFile javaClass = new JavaClassFile(file, commit.getDate(),false);
             javaClass.addRelatedCommit(commit);
             javaClass.addToFullHistory(commit);
             release.getClasses().put(file, javaClass);
-            calculator.updateFeatures(javaClass,commit);
-            calculator.calculateAge(javaClass,release.getReleasedDate());
+            LocThread thread = new LocThread(javaClass, commit, release.getReleasedDate());
+            threads.add(thread);
+            thread.start();
+            //calculator.updateFeatures(javaClass,commit, release.getReleasedDate());
         }
         for(String file: commit.getClassDeleted()){
             release.getClasses().remove(file);
@@ -93,9 +96,14 @@ public class DataPreparer {
                 JavaClassFile javaClass = release.getClasses().get(file);
                 javaClass.addRelatedCommit(commit);
                 javaClass.addToFullHistory(commit);
-                calculator.updateFeatures(javaClass,commit);
-                calculator.calculateAge(javaClass,release.getReleasedDate());
+                LocThread thread = new LocThread(javaClass, commit, release.getReleasedDate());
+                threads.add(thread);
+                thread.start();
+                //calculator.updateFeatures(javaClass,commit, release.getReleasedDate());
             }
+        }
+        for(LocThread thread: threads){
+            thread.join();
         }
     }
 
@@ -171,5 +179,26 @@ public class DataPreparer {
         issue.setAffectedVersions(affectedVersions);
 
         return true;
+    }
+
+    class LocThread extends Thread {
+        private JavaClassFile file;
+        private Commit commit;
+        private Date releaseDate;
+
+        LocThread(JavaClassFile file, Commit commit, Date releaseDate) {
+            this.file = file;
+            this.commit = commit;
+            this.releaseDate = releaseDate;
+        }
+
+        @Override
+        public void run() {
+            try {
+                calculator.updateFeatures(file,commit, releaseDate);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

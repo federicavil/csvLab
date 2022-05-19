@@ -75,10 +75,6 @@ public class ProjectManager {
             //elimino la metà delle release per lo snoring
             this.releases = this.releases.subList(0,this.releases.size()/2);
 
-            for(Release release: this.releases){
-                featureCalculator.calculateLOC(release);
-                System.out.println("calcolata");
-            }
 
         } catch (IOException | ParseException | InterruptedException e) {
             return new ArrayList<>();

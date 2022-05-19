@@ -16,6 +16,9 @@ public class JavaClassFile {
     private int maxChgSet;
     private int[] avgChgSet;
     private boolean bugginess;
+    private int churn;
+    private int max_churn;
+    private int[] avg_churn;
 
     public JavaClassFile(String name,Date date,  boolean bugginess){
         this.bugginess = bugginess;
@@ -28,22 +31,13 @@ public class JavaClassFile {
         this.chgSet = new HashSet<>();
         this.maxChgSet = 0;
         this.avgChgSet = new int[2];
+        this.churn = 0;
+        this.max_churn = 0;
+        this.avg_churn = new int[2];
     }
 
-    public JavaClassFile(String name, Date date, boolean bugginess, List<Commit> totalCommits){
-        this.bugginess = bugginess;
-        this.name = name;
-        this.creationDate = date;
-        this.relatedCommits = new ArrayList<>();
-        this.fullHistory = totalCommits;
-        this.authors = new HashSet<>();
-        this.numberOfRevisions = 0;
-        this.chgSet = new HashSet<>();
-        this.maxChgSet = 0;
-        this.avgChgSet = new int[2];
-    }
 
-    public JavaClassFile(String name, Date date, int age, boolean bugginess, List<Commit> totalCommits, Set<String> authors){
+    public JavaClassFile(String name, Date date, int loc, int age, boolean bugginess, List<Commit> totalCommits, Set<String> authors){
         this.bugginess = bugginess;
         this.name = name;
         this.creationDate = date;
@@ -55,16 +49,43 @@ public class JavaClassFile {
         this.chgSet = new HashSet<>();
         this.maxChgSet = 0;
         this.avgChgSet = new int[2];
+        this.churn = 0;
+        this.max_churn = 0;
+        this.avg_churn = new int[2];
+        this.loc = loc;
     }
 
-    public JavaClassFile(String name, boolean bugginess, List<Commit> commits, List<Commit> totalCommits){
-        this.bugginess = bugginess;
-        this.name = name;
-        this.relatedCommits = commits;
-        this.fullHistory = totalCommits;
-        this.chgSet = new HashSet<>();
-        this.maxChgSet = 0;
-        this.avgChgSet = new int[2];
+
+    public int getChurn() {
+        return churn;
+    }
+
+    public void updateChurn(int newChurn){
+        this.churn = this.churn + newChurn;
+    }
+
+    public void setChurn(int churn) {
+        this.churn = churn;
+    }
+
+    public int getMax_churn() {
+        return max_churn;
+    }
+
+    public void setMax_churn(int max_churn) {
+        this.max_churn = max_churn;
+    }
+
+    public int[] getAvg_churn() {
+        return avg_churn;
+    }
+
+    public int getAvgChurnVal(){
+        return this.avg_churn[0];
+    }
+
+    public void setAvg_churn(int[] avg_churn) {
+        this.avg_churn = avg_churn;
     }
 
     public Date getCreationDate() {
@@ -122,7 +143,7 @@ public class JavaClassFile {
     }
 
     public void addRelatedCommit(Commit commit){
-        this.relatedCommits.add(0,commit);
+        this.relatedCommits.add(commit);
     }
 
     public String getName() {
@@ -174,6 +195,6 @@ public class JavaClassFile {
     }
 
     public void addToFullHistory(Commit commit){
-        this.fullHistory.add(0,commit);
+        this.fullHistory.add(commit);
     }
 }

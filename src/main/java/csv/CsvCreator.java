@@ -10,7 +10,9 @@ import java.util.List;
 public class CsvCreator {
 
     private CsvFile file;
-    private String[] header = new String[]{"Release","Class","LOC","NR","NAuth","Age","ChgSetSize","MAX_ChgSetSize","AVG_ChgSetSize","Bugginess"};
+    private String[] header = new String[]{"Release","Class","LOC","NR","NAuth",
+            "Age","ChgSetSize","MAX_ChgSetSize","AVG_ChgSetSize",
+            "Churn","MAX_Churn","AVG_Churn","Bugginess"};
 
     public CsvCreator(String filepath, String[] header) throws IOException {
         this.file = new CsvFile(filepath);
@@ -39,6 +41,9 @@ public class CsvCreator {
                         String.valueOf(javaClass.getChgSetSize()),
                         String.valueOf(javaClass.getMaxChgSet()),
                         String.valueOf(javaClass.getAvgSetSize()),
+                        String.valueOf(javaClass.getChurn()),
+                        String.valueOf(javaClass.getMax_churn()),
+                        String.valueOf(javaClass.getAvgChurnVal()),
                         isBuggy.toString() });
                 if(isBuggy){
                     counter++;

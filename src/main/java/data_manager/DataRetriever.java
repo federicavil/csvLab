@@ -75,4 +75,20 @@ public class DataRetriever {
         return JsonParser.getFileContent(r);
     }
 
+    public int[] getLinesDiff(String commit1,String commit2, String file) throws IOException {
+        ProcessBuilder builder = new ProcessBuilder(
+                "cmd.exe", "/c", "cd " + this.projectLocation+ " && git diff --numstat "+commit1+".."+commit2+" -- "+file);
+        builder.redirectErrorStream(true);
+        Process p = builder.start();
+        BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        int[] result = new int[2];
+        try{
+            result = JsonParser.getLinesDiff(r);
+        }catch(NullPointerException e){
+            System.out.println(commit1 + " " + commit2);
+        }
+        return result;
+    }
+
+
 }

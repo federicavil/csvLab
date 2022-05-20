@@ -37,7 +37,7 @@ public class FeatureCalculator {
         if(churn > file.getMax_churn())
             file.setMax_churn(churn);
         int[] avgChurn = file.getAvg_churn();
-        file.getAvgChgSet()[0] = ((avgChurn[1]*avgChurn[0])+churn)/(avgChurn[1]+1);
+        file.setAvg_churn(((avgChurn[1]*avgChurn[0])+churn)/(avgChurn[1]+1));
         file.getAvg_churn()[1]++;
     }
 
@@ -54,19 +54,12 @@ public class FeatureCalculator {
     }
 
     private void calculateChgSetSize(JavaClassFile javaClass, Commit commit){
-        for(String file: commit.getClassAdded()){
-            if(!file.equals(javaClass.getName()))
-                javaClass.addToChgSet(file);
-        }
-        for(String file: commit.getClassModified()){
-            if(!file.equals(javaClass.getName()))
-                javaClass.addToChgSet(file);
-        }
         int sumChg = commit.getClassAdded().size() + commit.getClassModified().size() -1;
+        javaClass.setChgSetSize(javaClass.getChgSetSize()+sumChg);
         if(sumChg > javaClass.getMaxChgSet())
             javaClass.setMaxChgSet(sumChg);
         int[] avgChgSet = javaClass.getAvgChgSet();
-        javaClass.getAvgChgSet()[0] = ((avgChgSet[1]*avgChgSet[0])+sumChg)/(avgChgSet[1]+1);
+        javaClass.setAvgChgSetSize(((avgChgSet[1]*avgChgSet[0])+sumChg)/(avgChgSet[1]+1));
         javaClass.getAvgChgSet()[1]++;
     }
 

@@ -12,7 +12,7 @@ public class JavaClassFile {
     private Set<String> authors;
     private List<Commit> relatedCommits;
     private List<Commit> fullHistory;
-    private Set<String> chgSet;
+    private int chgSet;
     private int maxChgSet;
     private int[] avgChgSet;
     private boolean bugginess;
@@ -28,12 +28,13 @@ public class JavaClassFile {
         this.fullHistory = new ArrayList<>();
         this.authors = new HashSet<>();
         this.numberOfRevisions = 0;
-        this.chgSet = new HashSet<>();
+        this.chgSet = 0;
         this.maxChgSet = 0;
         this.avgChgSet = new int[2];
         this.churn = 0;
         this.max_churn = 0;
         this.avg_churn = new int[2];
+        this.loc = 0;
     }
 
 
@@ -46,7 +47,7 @@ public class JavaClassFile {
         this.authors = authors;
         this.numberOfRevisions = 0;
         this.age = age;
-        this.chgSet = new HashSet<>();
+        this.chgSet = 0;
         this.maxChgSet = 0;
         this.avgChgSet = new int[2];
         this.churn = 0;
@@ -84,8 +85,8 @@ public class JavaClassFile {
         return this.avg_churn[0];
     }
 
-    public void setAvg_churn(int[] avg_churn) {
-        this.avg_churn = avg_churn;
+    public void setAvg_churn(int avg_churn) {
+        this.avg_churn[0] = avg_churn;
     }
 
     public Date getCreationDate() {
@@ -117,11 +118,14 @@ public class JavaClassFile {
     }
 
     public int getChgSetSize(){
-        return this.chgSet.size();
+        return this.chgSet;
+    }
+    public void setAvgChgSetSize(int value){
+        this.avgChgSet[0] = value;
     }
 
-    public void addToChgSet(String file){
-        this.chgSet.add(file);
+    public void setChgSetSize(int val){
+        this.chgSet = val;
     }
 
     public int[] getAvgChgSet(){

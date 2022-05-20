@@ -163,9 +163,6 @@ public class JsonParser {
 
     public static int[] getLinesDiff(BufferedReader reader) throws IOException,NullPointerException {
         String line = reader.readLine();
-        if(line == null){
-            System.out.println(" ");
-        }
         String[] wordsSplitted = Arrays.asList(line.split("\\s+")).stream().filter(str -> !str.isEmpty()).collect(Collectors.toList()).toArray(new String[0]);
         int[] result = new int[2];
         result[1] = Integer.parseInt(wordsSplitted[0]);

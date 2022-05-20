@@ -81,11 +81,11 @@ public class DataRetriever {
         builder.redirectErrorStream(true);
         Process p = builder.start();
         BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        int[] result = new int[2];
+        int[] result;
         try{
             result = JsonParser.getLinesDiff(r);
         }catch(NullPointerException e){
-            System.out.println(commit1 + " " + commit2);
+            result = new int[]{0, 0};
         }
         return result;
     }

@@ -82,10 +82,10 @@ public class DataPreparer {
             javaClass.addRelatedCommit(commit);
             javaClass.addToFullHistory(commit);
             release.getClasses().put(file, javaClass);
+
             LocThread thread = new LocThread(javaClass, commit, release.getReleasedDate());
             threads.add(thread);
             thread.start();
-            //calculator.updateFeatures(javaClass,commit, release.getReleasedDate());
         }
         for(String file: commit.getClassDeleted()){
             release.getClasses().remove(file);
@@ -99,7 +99,6 @@ public class DataPreparer {
                 LocThread thread = new LocThread(javaClass, commit, release.getReleasedDate());
                 threads.add(thread);
                 thread.start();
-                //calculator.updateFeatures(javaClass,commit, release.getReleasedDate());
             }
         }
         for(LocThread thread: threads){

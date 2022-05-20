@@ -81,7 +81,7 @@ public class JsonParser {
         String line = reader.readLine();
         boolean isAtTheEnd = true;
         while(line != null){
-            String[] wordsSplitted = Arrays.asList(line.split("\\s+")).stream().filter(str -> !str.isEmpty()).collect(Collectors.toList()).toArray(new String[0]);
+            String[] wordsSplitted = Arrays.asList(line.split("\\s+")).stream().filter(str -> !str.isEmpty()).toList().toArray(new String[0]);
             List<String> words = Arrays.asList(wordsSplitted);
             if(!words.isEmpty()){
                 if(words.get(0).startsWith("commit") && isAtTheEnd){
@@ -163,7 +163,7 @@ public class JsonParser {
 
     public static int[] getLinesDiff(BufferedReader reader) throws IOException,NullPointerException {
         String line = reader.readLine();
-        String[] wordsSplitted = Arrays.asList(line.split("\\s+")).stream().filter(str -> !str.isEmpty()).collect(Collectors.toList()).toArray(new String[0]);
+        String[] wordsSplitted = Arrays.asList(line.split("\\s+")).stream().filter(str -> !str.isEmpty()).toList().toArray(new String[0]);
         int[] result = new int[2];
         result[1] = Integer.parseInt(wordsSplitted[0]);
         result[0] = Integer.parseInt(wordsSplitted[1]);

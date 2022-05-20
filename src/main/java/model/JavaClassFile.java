@@ -17,8 +17,8 @@ public class JavaClassFile {
     private int[] avgChgSet;
     private boolean bugginess;
     private int churn;
-    private int max_churn;
-    private int[] avg_churn;
+    private int maxChurn;
+    private int[] avgChurn;
 
     public JavaClassFile(String name,Date date,  boolean bugginess){
         this.bugginess = bugginess;
@@ -32,8 +32,8 @@ public class JavaClassFile {
         this.maxChgSet = 0;
         this.avgChgSet = new int[2];
         this.churn = 0;
-        this.max_churn = 0;
-        this.avg_churn = new int[2];
+        this.maxChurn = 0;
+        this.avgChurn = new int[2];
         this.loc = 0;
     }
 
@@ -51,8 +51,8 @@ public class JavaClassFile {
         this.maxChgSet = 0;
         this.avgChgSet = new int[2];
         this.churn = 0;
-        this.max_churn = 0;
-        this.avg_churn = new int[2];
+        this.maxChurn = 0;
+        this.avgChurn = new int[2];
         this.loc = loc;
     }
 
@@ -69,24 +69,24 @@ public class JavaClassFile {
         this.churn = churn;
     }
 
-    public int getMax_churn() {
-        return max_churn;
+    public int getMaxChurn() {
+        return maxChurn;
     }
 
-    public void setMax_churn(int max_churn) {
-        this.max_churn = max_churn;
+    public void setMaxChurn(int maxChurn) {
+        this.maxChurn = maxChurn;
     }
 
-    public int[] getAvg_churn() {
-        return avg_churn;
+    public int[] getAvgChurn() {
+        return avgChurn;
     }
 
     public int getAvgChurnVal(){
-        return this.avg_churn[0];
+        return this.avgChurn[0];
     }
 
-    public void setAvg_churn(int avg_churn) {
-        this.avg_churn[0] = avg_churn;
+    public void setAvgChurn(int avgChurn) {
+        this.avgChurn[0] = avgChurn;
     }
 
     public Date getCreationDate() {

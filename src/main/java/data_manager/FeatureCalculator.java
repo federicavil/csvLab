@@ -10,12 +10,10 @@ import java.util.concurrent.TimeUnit;
 
 public class FeatureCalculator {
 
-    private List<Release> releases;
     private String projectName;
     private String projectLocation;
 
-    public FeatureCalculator(List<Release> releases, String projectName, String projectLocation) {
-        this.releases = releases;
+    public FeatureCalculator(String projectName, String projectLocation) {
         this.projectName = projectName;
         this.projectLocation = projectLocation;
     }
@@ -34,11 +32,11 @@ public class FeatureCalculator {
         int churn = diff[0] - diff[1];
         file.setLoc(file.getLoc()+churn);
         file.updateChurn(churn);
-        if(churn > file.getMax_churn())
-            file.setMax_churn(churn);
-        int[] avgChurn = file.getAvg_churn();
-        file.setAvg_churn(((avgChurn[1]*avgChurn[0])+churn)/(avgChurn[1]+1));
-        file.getAvg_churn()[1]++;
+        if(churn > file.getMaxChurn())
+            file.setMaxChurn(churn);
+        int[] avgChurn = file.getAvgChurn();
+        file.setAvgChurn(((avgChurn[1]*avgChurn[0])+churn)/(avgChurn[1]+1));
+        file.getAvgChurn()[1]++;
     }
 
     public void updateFeatures(JavaClassFile javaClass, Commit commit, Date releaseDate) throws IOException {

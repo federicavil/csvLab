@@ -61,7 +61,7 @@ public class ProjectManager {
             commits = this.retriever.retrieveCommits();
             issues = this.getIssueInfo();
 
-            FeatureCalculator featureCalculator = new FeatureCalculator(this.releases, this.projectName, this.projectLocation);
+            FeatureCalculator featureCalculator = new FeatureCalculator(this.projectName, this.projectLocation);
 
             DataPreparer preparer = new DataPreparer(commits,this.releases,issues, featureCalculator);
             // Determino le classi presenti nelle varie releases

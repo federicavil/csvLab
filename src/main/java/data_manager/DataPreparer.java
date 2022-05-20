@@ -54,9 +54,10 @@ public class DataPreparer {
     }
 
     private void copyPreviousClasses(int index){
-        HashMap<String, JavaClassFile> classes = this.releases.get(index -1).getClasses();
-        HashMap<String, JavaClassFile> newClasses = new HashMap<>();
-        for(String name: classes.keySet()){
+        Map<String, JavaClassFile> classes = this.releases.get(index -1).getClasses();
+        Map<String, JavaClassFile> newClasses = new HashMap<>();
+        for(Map.Entry<String,JavaClassFile> entry : classes.entrySet()){
+           String name = entry.getKey();
            JavaClassFile classFile = classes.get(name);
            List<Commit> newCommits = new ArrayList<>();
            for(Commit commit: classFile.getFullHistory()){
@@ -73,7 +74,7 @@ public class DataPreparer {
         this.releases.get(index).setClasses(newClasses);
     }
 
-    private void updateReleaseClasses(int index, Commit commit) throws IOException, InterruptedException {
+    private void updateReleaseClasses(int index, Commit commit) throws InterruptedException {
         Release release = this.releases.get(index);
         List<LocThread> threads = new ArrayList<>();
         // Aggiunge o elimina le classe da una determinata release

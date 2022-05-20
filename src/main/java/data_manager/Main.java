@@ -14,7 +14,7 @@ public class Main {
     private static final String PROJECTNAME = "BOOKKEEPER";
     private static final String PROJECTLOCATION = "C:/Users/Federica/git/bookkeeper_ml";
 
-    public static void main(String[] args) throws IOException, ParseException, InterruptedException {
+    public static void main(String[] args) throws IOException, ParseException {
         Double proportion = Proportion.coldStart();
         ProjectManager manager = new ProjectManager(PROJECTNAME, PROJECTLOCATION);
         // Prendo i dati sulla bugginess delle classi in ogni release
@@ -26,7 +26,6 @@ public class Main {
         System.out.println("Calcolata bugginess");
         // Calcolo le features delle classi
 
-        //releases = manager.getFeatures();
         Instant end = Instant.now();
         Duration timeElapsed = Duration.between(start, end);
         System.out.println("Time taken: "+ timeElapsed.toSeconds() +" seconds");

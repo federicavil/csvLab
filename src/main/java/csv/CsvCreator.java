@@ -42,7 +42,7 @@ public class CsvCreator {
                         String.valueOf(javaClass.getMaxChgSet()),
                         String.valueOf(javaClass.getAvgSetSize()),
                         String.valueOf(javaClass.getChurn()),
-                        String.valueOf(javaClass.getMax_churn()),
+                        String.valueOf(javaClass.getMaxChurn()),
                         String.valueOf(javaClass.getAvgChurnVal()),
                         isBuggy.toString() });
                 if(isBuggy){

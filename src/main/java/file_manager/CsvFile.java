@@ -3,7 +3,6 @@ package file_manager;
 import com.opencsv.CSVWriter;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -20,7 +19,6 @@ public class CsvFile {
     private void initializeWriter() throws IOException {
         FileWriter fileWriter = new FileWriter(this.file);
         this.csvWriter = new CSVWriter(fileWriter);
-        FileReader fileReader = new FileReader(this.file);
     }
 
     public void setHeader(String[] header){

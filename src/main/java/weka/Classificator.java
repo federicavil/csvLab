@@ -19,7 +19,7 @@ import weka.core.converters.ConverterUtils.DataSource;
 public class Classificator {
 
     private Classifier wekaClassifier;
-    private static final String extension = ".arff";
+    private static final String EXTENSION = ".arff";
     private double precision;
     private double recall;
     private double kappa;
@@ -53,8 +53,8 @@ public class Classificator {
         List<String[]> results = new ArrayList<>();
         for(int i = 1; i < releases.size(); i++){
             // Crea il training
-            ArffCreator trainingSet = new ArffCreator(trainingFile+extension, trainingFile);
-            ArffCreator testingSet = new ArffCreator(testingFile+extension, testingFile);
+            ArffCreator trainingSet = new ArffCreator(trainingFile+ EXTENSION, trainingFile);
+            ArffCreator testingSet = new ArffCreator(testingFile+ EXTENSION, testingFile);
             String[] result = new String[4];
             trainingSet.writeData(releases.subList(0,i));
             testingSet.writeData(List.of(releases.get(i)));
@@ -69,9 +69,9 @@ public class Classificator {
     }
 
     public void evaluate(String trainingFile, String testingFile, int i) throws Exception {
-        DataSource source1 = new DataSource(trainingFile+extension);
+        DataSource source1 = new DataSource(trainingFile+ EXTENSION);
         Instances training = source1.getDataSet();
-        DataSource source2 = new DataSource(testingFile+extension);
+        DataSource source2 = new DataSource(testingFile+ EXTENSION);
         Instances testing = source2.getDataSet();
         int numAttr = training.numAttributes();
         training.setClassIndex(numAttr - 1);

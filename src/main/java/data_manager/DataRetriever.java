@@ -17,7 +17,7 @@ public class DataRetriever {
     private String projectname;
     private String projectLocation;
     private String branch;
-    private static final String command = "cmd.exe";
+    private static final String COMMAND = "cmd.exe";
 
     public DataRetriever(String projectName, String projectLocation, String branch){
         this.projectname = projectName;
@@ -60,7 +60,7 @@ public class DataRetriever {
 
     public List<Commit> retrieveCommits() throws IOException, ParseException {
         ProcessBuilder builder = new ProcessBuilder(
-                command, "/c", "cd " + this.projectLocation+ " && git log --full-history --name-status --date=iso --stat "+ this.branch);
+                COMMAND, "/c", "cd " + this.projectLocation+ " && git log --full-history --name-status --date=iso --stat "+ this.branch);
         builder.redirectErrorStream(true);
         Process p = builder.start();
         BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -69,7 +69,7 @@ public class DataRetriever {
 
     public List<String> retrieveFileContent(Commit commit, String filePath) throws IOException {
         ProcessBuilder builder = new ProcessBuilder(
-                command, "/c", "cd " + this.projectLocation+ " && git show "+commit.getId()+":"+filePath);
+                COMMAND, "/c", "cd " + this.projectLocation+ " && git show "+commit.getId()+":"+filePath);
         builder.redirectErrorStream(true);
         Process p = builder.start();
         BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -78,7 +78,7 @@ public class DataRetriever {
 
     public int[] getLinesDiff(String commit1,String commit2, String file) throws IOException {
         ProcessBuilder builder = new ProcessBuilder(
-                command, "/c", "cd " + this.projectLocation+ " && git diff --numstat "+commit1+".."+commit2+" -- "+file);
+                COMMAND, "/c", "cd " + this.projectLocation+ " && git diff --numstat "+commit1+".."+commit2+" -- "+file);
         builder.redirectErrorStream(true);
         Process p = builder.start();
         BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));

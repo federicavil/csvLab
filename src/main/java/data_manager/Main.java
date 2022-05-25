@@ -1,7 +1,9 @@
 package data_manager;
 
-import csv.CsvCreator;
+import file_manager.CsvCreator;
 import model.Release;
+import weka.Classificator;
+import weka.Classificators;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -32,11 +34,44 @@ public class Main {
 
         try {
             //Creo il file csv
-            CsvCreator file = new CsvCreator("bugginess_"+PROJECTNAME.toLowerCase()+".csv");
-            file.writeDataOnCsv(releases);
-        } catch (IOException e) {
+            CsvCreator dataFile = new CsvCreator("bugginess_"+PROJECTNAME.toLowerCase()+".csv",new String[]{"Release","Class","LOC","NR","NAuth",
+                    "Age","ChgSetSize","MAX_ChgSetSize","AVG_ChgSetSize",
+                    "Churn","MAX_Churn","AVG_Churn","Bugginess"});
+            dataFile.writeDataOnCsv(releases);
+
+            CsvCreator metricsFile = new CsvCreator("weka_"+PROJECTNAME.toLowerCase()+".csv",new String[]{"Dataset","NTrainingRelease",
+                        "Classifier","Precision","Recall","Kappa","AUC"});
+
+            List<String[]> results;
+
+            Classificator naiveBayes = new Classificator(Classificators.NAIVEBAYES);
+            results = naiveBayes.walkForwardEvaluation(releases);
+            metricsFile.writeDataOnCsv(PROJECTNAME, "NaiveBayes",results);
+
+            System.out.println("NAIVEBAYES precision: "+naiveBayes.getPrecision()+" recall: "
+                    +naiveBayes.getRecall()+ " kappa: "+naiveBayes.getKappa() + " auc: "+ naiveBayes.getAuc());
+
+            Classificator ibk = new Classificator(Classificators.IBK);
+            results = ibk.walkForwardEvaluation(releases);
+            metricsFile.writeDataOnCsv(PROJECTNAME, "IBk",results);
+
+            System.out.println("IBK precision: "+ibk.getPrecision()+" recall: "
+                    +ibk.getRecall()+ " kappa: "+ibk.getKappa() + " auc: "+ ibk.getAuc());
+
+            Classificator randomForest = new Classificator(Classificators.RANDOMFOREST);
+            results = randomForest.walkForwardEvaluation(releases);
+            metricsFile.writeDataOnCsv(PROJECTNAME, "RandomForest",results);
+
+            metricsFile.closeFile();
+
+            System.out.println("RANDOMFOREST precision: "+randomForest.getPrecision()+" recall: "
+                    +randomForest.getRecall()+ " kappa: "+randomForest.getKappa() + " auc: "+ randomForest.getAuc());
+
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
 }

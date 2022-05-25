@@ -48,25 +48,15 @@ public class Main {
             results = naiveBayes.walkForwardEvaluation(releases);
             metricsFile.writeDataOnCsv(PROJECTNAME, "NaiveBayes",results);
 
-            System.out.println("NAIVEBAYES precision: "+naiveBayes.getPrecision()+" recall: "
-                    +naiveBayes.getRecall()+ " kappa: "+naiveBayes.getKappa() + " auc: "+ naiveBayes.getAuc());
-
             Classificator ibk = new Classificator(Classificators.IBK);
             results = ibk.walkForwardEvaluation(releases);
             metricsFile.writeDataOnCsv(PROJECTNAME, "IBk",results);
-
-            System.out.println("IBK precision: "+ibk.getPrecision()+" recall: "
-                    +ibk.getRecall()+ " kappa: "+ibk.getKappa() + " auc: "+ ibk.getAuc());
 
             Classificator randomForest = new Classificator(Classificators.RANDOMFOREST);
             results = randomForest.walkForwardEvaluation(releases);
             metricsFile.writeDataOnCsv(PROJECTNAME, "RandomForest",results);
 
             metricsFile.closeFile();
-
-            System.out.println("RANDOMFOREST precision: "+randomForest.getPrecision()+" recall: "
-                    +randomForest.getRecall()+ " kappa: "+randomForest.getKappa() + " auc: "+ randomForest.getAuc());
-
 
         } catch (Exception e) {
             e.printStackTrace();

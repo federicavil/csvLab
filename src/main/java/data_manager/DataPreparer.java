@@ -27,7 +27,7 @@ public class DataPreparer {
         this.issues = issues;
     }
 
-    public List<Release> releaseClassesLinkage() throws IOException, InterruptedException {
+    public List<Release> releaseClassesLinkage() throws InterruptedException {
         int j = this.commits.size()-1;
         int i = 0;
         //Scorro tutte le releases in ordine cronologico crescente

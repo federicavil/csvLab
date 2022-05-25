@@ -2,7 +2,6 @@ package data_manager;
 
 import model.Commit;
 import model.JavaClassFile;
-import model.Release;
 
 import java.io.IOException;
 import java.util.*;

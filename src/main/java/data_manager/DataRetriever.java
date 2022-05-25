@@ -17,7 +17,7 @@ public class DataRetriever {
     private String projectname;
     private String projectLocation;
     private String branch;
-    private final String command = "cmd.exe";
+    private static final String command = "cmd.exe";
 
     public DataRetriever(String projectName, String projectLocation, String branch){
         this.projectname = projectName;

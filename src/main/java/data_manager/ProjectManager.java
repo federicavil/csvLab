@@ -76,8 +76,10 @@ public class ProjectManager {
             this.releases = this.releases.subList(0,this.releases.size()/2);
 
 
-        } catch (IOException | ParseException | InterruptedException e) {
+        } catch (IOException | ParseException e) {
             return new ArrayList<>();
+        }catch(InterruptedException e){
+            Thread.currentThread().interrupt();
         }
         return this.releases;
     }

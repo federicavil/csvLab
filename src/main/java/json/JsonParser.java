@@ -14,7 +14,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class JsonParser {
@@ -95,7 +94,7 @@ public class JsonParser {
                 else if(words.get(0).startsWith("Date") && commit.getDate() == null){
                     commit.setDate(stringToDate(words.get(1)));
                 }
-                else if(words.get(0).equals("A") || words.get(0).equals("D") || words.get(0).equals("M") || Pattern.matches("R[0-9]+",words.get(0))){
+                else if(words.get(0).equals("A") || words.get(0).equals("D") || words.get(0).equals("M") || Pattern.matches("R\\d+",words.get(0))){
                     isAtTheEnd = addFile(commit,words.subList(1,words.size()),words.get(0));
                 }
                 else{
@@ -118,10 +117,10 @@ public class JsonParser {
 
     private static void addIssues(Commit commit, List<String> words, String projectName){
         for(String word: words){
-            if(Pattern.matches(projectName + "-[0-9]+", word)){
+            if(Pattern.matches(projectName + "-\\d+", word)){
                 commit.addIssue(word);
             }
-            else if(Pattern.matches("#[0-9]+",word)){
+            else if(Pattern.matches("#\\d+",word)){
                 word = projectName + "-" + word.substring(1);
                 commit.addIssue(word);
             }

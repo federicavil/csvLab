@@ -41,6 +41,7 @@ public class DataPreparer {
                 Commit currentCommit = this.commits.get(j);
                 if(currentCommit.getDate().before(this.releases.get(i).getReleasedDate())){
                     // Il commit si riferisce alla release presa in considerazione
+                    currentCommit.setRelease(this.releases.get(i));
                     updateReleaseClasses(i,currentCommit);
                     j--;
                 }

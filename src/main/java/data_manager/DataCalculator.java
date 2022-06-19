@@ -61,21 +61,18 @@ public class DataCalculator {
                 }
                 else {
                     // Aggiorno la bugginess
-
-                    //Prendo l'indice della release a cui appartiene il commit di fix
-                    int i;
-                    for(i = 0; i < this.releases.size(); i++){
-                        if(commit.getDate().before(this.releases.get(i).getReleasedDate())){
-                            break;
-                        }
-                    }
-                    setBugginess(affectedVersion.getClasses().get(file),i);
+                    setBugginess(affectedVersion.getClasses().get(file),commit.getRelease());
                 }
             }
         }
     }
 
-    private void setBugginess(JavaClassFile javaClassFile, int i){
+    private void setBugginess(JavaClassFile javaClassFile,Release release){
+        int i;
+        for(i = 0; i < this.releases.size(); i++){
+            if(this.releases.get(i).equals(release))
+                break;
+        }
         for(int j = i; j < this.releases.size(); j++){
             //Setto la bugginess vista dal punto di vista della release j a true
             javaClassFile.isBuggy()[j] = true;
@@ -89,12 +86,7 @@ public class DataCalculator {
             newFile = renamed.get(newFile);
         }
         if(newFile != null){
-            int i;
-            for(i = 0; i < this.releases.size(); i++){
-                if(this.releases.get(i).equals(release))
-                    break;
-            }
-            setBugginess(release.getClasses().get(newFile),i);
+            setBugginess(release.getClasses().get(newFile),release);
         }
 
     }

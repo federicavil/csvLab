@@ -25,7 +25,6 @@ public class CsvCreator {
 
     public void writeDataOnCsv(List<Release> releases) throws IOException {
         List<String[]> data = new ArrayList<>();
-        int counter = 0;
         for(Release release: releases){
             for(JavaClassFile javaClass: release.getClasses().values()){
                 boolean[] bugginess = javaClass.isBuggy();

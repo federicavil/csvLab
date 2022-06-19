@@ -11,6 +11,7 @@ public class Commit {
     private Set<String> classAdded;
     private Set<String> classModified;
     private Set<String> classDeleted;
+    private Release release;
 
     public Commit() {
         this.author = null;
@@ -29,6 +30,14 @@ public class Commit {
         this.classAdded = classAdded;
         this.classModified = classModified;
         this.classDeleted = classDeleted;
+    }
+
+    public void setRelease(Release release) {
+        this.release = release;
+    }
+
+    public Release getRelease() {
+        return release;
     }
 
     public String getAuthor() {

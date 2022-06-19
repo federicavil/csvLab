@@ -15,12 +15,12 @@ public class JavaClassFile {
     private int chgSet;
     private int maxChgSet;
     private int[] avgChgSet;
-    private boolean bugginess;
+    private boolean[] bugginess;
     private int churn;
     private int maxChurn;
     private int[] avgChurn;
 
-    public JavaClassFile(String name,Date date,  boolean bugginess){
+    public JavaClassFile(String name,Date date, boolean[] bugginess){
         this.bugginess = bugginess;
         this.name = name;
         this.creationDate = date;
@@ -38,7 +38,7 @@ public class JavaClassFile {
     }
 
 
-    public JavaClassFile(String name, Date date, int loc, int age, boolean bugginess, List<Commit> totalCommits, Set<String> authors){
+    public JavaClassFile(String name, Date date, int loc, int age, boolean[] bugginess, List<Commit> totalCommits, Set<String> authors){
         this.bugginess = bugginess;
         this.name = name;
         this.creationDate = date;
@@ -174,11 +174,11 @@ public class JavaClassFile {
         this.relatedCommits = relatedCommits;
     }
 
-    public boolean isBuggy(){
+    public boolean[] isBuggy(){
         return this.bugginess;
     }
 
-    public void setBugginess(boolean bugginess){
+    public void setBugginess(boolean[] bugginess){
         this.bugginess = bugginess;
     }
 

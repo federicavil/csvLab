@@ -1,9 +1,6 @@
 package data_manager;
 
-import model.Commit;
-import model.Issue;
-import model.Release;
-import model.RenamedClassesList;
+import model.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,24 +61,42 @@ public class DataCalculator {
                 }
                 else {
                     // Aggiorno la bugginess
-                    affectedVersion.getClasses().get(file).setBugginess(true);
+
+                    //Prendo l'indice della release a cui appartiene il commit di fix
+                    int i;
+                    for(i = 0; i < this.releases.size(); i++){
+                        if(commit.getDate().before(this.releases.get(i).getReleasedDate())){
+                            break;
+                        }
+                    }
+                    setBugginess(affectedVersion.getClasses().get(file),i);
                 }
             }
         }
     }
 
+    private void setBugginess(JavaClassFile javaClassFile, int i){
+        for(int j = i; j < this.releases.size(); j++){
+            //Setto la bugginess vista dal punto di vista della release j a true
+            javaClassFile.isBuggy()[j] = true;
+        }
+    }
+
     private void setOriginalFile(Release release, String file){
-        //System.out.println("CERCO IL CAZZO DI FILE");
         HashMap<String, String> renamed = (HashMap<String, String>) RenamedClassesList.getInstance().getRenamedClasses();
         String newFile = renamed.get(file);
         while(newFile != null && !release.getClasses().containsKey(newFile)){
             newFile = renamed.get(newFile);
         }
         if(newFile != null){
-            release.getClasses().get(newFile).setBugginess(true);
-            //System.out.println("TROVATO");
+            int i;
+            for(i = 0; i < this.releases.size(); i++){
+                if(this.releases.get(i).equals(release))
+                    break;
+            }
+            setBugginess(release.getClasses().get(newFile),i);
         }
-        //else System.out.println("NON HO TROVATO IL CAZZO DI FILE");
+
     }
 
     private void assignBugginess(Issue issue){

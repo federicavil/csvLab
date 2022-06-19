@@ -120,6 +120,10 @@ public class JsonParser {
             if(Pattern.matches(projectName + "-\\d+", word)){
                 commit.addIssue(word);
             }
+            else if(Pattern.matches("\\["+projectName + "-\\d+\\]", word)){
+                word = word.substring(1,word.length()-1);
+                commit.addIssue(word);
+            }
             else if(Pattern.matches("#\\d+",word)){
                 word = projectName + "-" + word.substring(1);
                 commit.addIssue(word);

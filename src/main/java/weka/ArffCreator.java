@@ -22,7 +22,7 @@ public class ArffCreator {
     }
 
 
-    public void writeData(List<Release> releases) throws IOException {
+    public void writeData(List<Release> releases, boolean training) throws IOException {
         FileWriter fileWriter = new FileWriter(this.file);
         PrintWriter printWriter = new PrintWriter(fileWriter);
         //Titolo
@@ -44,8 +44,10 @@ public class ArffCreator {
                         javaClass.getAvgSetSize() +","+
                         javaClass.getChurn() +","+
                         javaClass.getMaxChurn() +","+
-                        javaClass.getAvgChurnVal() +","+
-                        javaClass.isBuggy();
+                        javaClass.getAvgChurnVal() +",";
+                if(training)
+                    data = data + javaClass.isBuggy()[releases.size()-1];
+                else data = data + javaClass.isBuggy()[javaClass.isBuggy().length-1];
                 printWriter.println(data);
             }
         }

@@ -56,8 +56,8 @@ public class Classificator {
             ArffCreator trainingSet = new ArffCreator(trainingFile+ EXTENSION, trainingFile);
             ArffCreator testingSet = new ArffCreator(testingFile+ EXTENSION, testingFile);
             String[] result = new String[4];
-            trainingSet.writeData(releases.subList(0,i));
-            testingSet.writeData(List.of(releases.get(i)));
+            trainingSet.writeData(releases.subList(0,i),true);
+            testingSet.writeData(List.of(releases.get(i)),false);
             evaluate(trainingFile, testingFile, i);
             result[0] = String.valueOf(this.precision);
             result[1] = String.valueOf(this.recall);

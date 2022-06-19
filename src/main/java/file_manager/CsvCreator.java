@@ -25,12 +25,10 @@ public class CsvCreator {
 
     public void writeDataOnCsv(List<Release> releases) throws IOException {
         List<String[]> data = new ArrayList<>();
-        System.out.println("DATI");
-        Boolean isBuggy = null;
         int counter = 0;
         for(Release release: releases){
             for(JavaClassFile javaClass: release.getClasses().values()){
-                isBuggy = javaClass.isBuggy();
+                boolean[] bugginess = javaClass.isBuggy();
                 data.add(new String[] {release.getName(),
                         javaClass.getName(),
                         String.valueOf(javaClass.getLoc()),
@@ -43,16 +41,11 @@ public class CsvCreator {
                         String.valueOf(javaClass.getChurn()),
                         String.valueOf(javaClass.getMaxChurn()),
                         String.valueOf(javaClass.getAvgChurnVal()),
-                        isBuggy.toString() });
-                if(isBuggy){
-                    counter++;
-                    System.out.println(release.getName() + " "+javaClass.getName());
-                }
+                        String.valueOf(bugginess[bugginess.length-1])});
             }
         }
         this.file.addData(data);
         this.closeFile();
-        System.out.println("SCRITTE " + counter);
     }
 
     public void writeDataOnCsv(String project, String classifier, List<String[]> results){

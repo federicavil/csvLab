@@ -29,7 +29,7 @@ public class DataPreparer {
 
     public List<Release> releaseClassesLinkage() throws InterruptedException {
         int j = this.commits.size()-1;
-        int i = 0;
+        int i;
         //Scorro tutte le releases in ordine cronologico crescente
         for(i = 0; i < this.releases.size(); i++){
             // Dalla seconda release in poi, questa avrà anche le classi della release precedente
@@ -79,7 +79,9 @@ public class DataPreparer {
         List<LocThread> threads = new ArrayList<>();
         // Aggiunge o elimina le classe da una determinata release
         for(String file: commit.getClassAdded()){
-            JavaClassFile javaClass = new JavaClassFile(file, commit.getDate(),false);
+            boolean[] bugginess = new boolean[this.releases.size()];
+            Arrays.fill(bugginess, Boolean.FALSE);
+            JavaClassFile javaClass = new JavaClassFile(file, commit.getDate(),bugginess);
             javaClass.addRelatedCommit(commit);
             javaClass.addToFullHistory(commit);
             release.getClasses().put(file, javaClass);

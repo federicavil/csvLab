@@ -22,6 +22,7 @@ public class Main {
         // Prendo i dati sulla bugginess delle classi in ogni release
         Instant start = Instant.now();
         List<Release> releases = manager.getBugginess(proportion);
+
         if(releases.isEmpty()){
             System.out.println("PROBLEMA");
         }

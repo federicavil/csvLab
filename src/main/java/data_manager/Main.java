@@ -6,6 +6,10 @@ import weka.Classificator;
 import weka.Classificators;
 import weka.SamplingType;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
@@ -23,7 +27,7 @@ public class Main {
         List<Release> releases = manager.getBugginess(proportion);
 
         if(releases.isEmpty()){
-            System.out.println("PROBLEMA");
+            Logger.getLogger("Logger").log(Level.SEVERE, "Error");
         }
         try {
             //Creo il file csv
@@ -38,161 +42,165 @@ public class Main {
 
             List<String[]> results;
             String[] technics;
+            String backwardSearch = "Backward search";
+            String oversampling = "oversampling";
+            String undersampling = "undersampling";
+            String costsensitivity = "cost sensitivity";
 
             //Validation without feature selection and without sampling
             technics = new String[]{"no","no selection","no"};
             Classificator naiveBayes = new Classificator(Classificators.NAIVEBAYES);
             results = naiveBayes.walkForwardEvaluation(PROJECTNAME, releases, false, false,null);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "NaiveBayes",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.NAIVEBAYES,technics,results);
 
             Classificator ibk = new Classificator(Classificators.IBK);
             results = ibk.walkForwardEvaluation(PROJECTNAME, releases, false, false, null);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "IBk",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.IBK,technics,results);
 
             Classificator randomForest = new Classificator(Classificators.RANDOMFOREST);
             results = randomForest.walkForwardEvaluation(PROJECTNAME,releases, false,false, null);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "RandomForest",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.RANDOMFOREST,technics,results);
 
             //Validation with feature selection and without sampling
-            technics = new String[]{"no","Backward search","no"};
+            technics = new String[]{"no",backwardSearch,"no"};
             naiveBayes = new Classificator(Classificators.NAIVEBAYES);
             results = naiveBayes.walkForwardEvaluation(PROJECTNAME,releases, false,true, null);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "NaiveBayes",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.NAIVEBAYES,technics,results);
 
             ibk = new Classificator(Classificators.IBK);
             results = ibk.walkForwardEvaluation(PROJECTNAME,releases, false, true, null);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "IBk",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.IBK,technics,results);
 
             randomForest = new Classificator(Classificators.RANDOMFOREST);
             results = randomForest.walkForwardEvaluation(PROJECTNAME,releases, false, true, null);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "RandomForest",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.RANDOMFOREST,technics,results);
 
             //Validation without feature selection and with undersampling
-            technics = new String[]{"no","no","undersampling"};
+            technics = new String[]{"no","no",undersampling};
             naiveBayes = new Classificator(Classificators.NAIVEBAYES);
             results = naiveBayes.walkForwardEvaluation(PROJECTNAME,releases, false, false, SamplingType.UNDERSAMPLING);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "NaiveBayes",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.NAIVEBAYES,technics,results);
 
             ibk = new Classificator(Classificators.IBK);
             results = ibk.walkForwardEvaluation(PROJECTNAME,releases, false, false, SamplingType.UNDERSAMPLING);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "IBk",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.IBK,technics,results);
 
             randomForest = new Classificator(Classificators.RANDOMFOREST);
             results = randomForest.walkForwardEvaluation(PROJECTNAME,releases, false, false, SamplingType.UNDERSAMPLING);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "RandomForest",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.RANDOMFOREST,technics,results);
 
             //Validation without feature selection and with oversampling
-            technics = new String[]{"no","no","oversampling"};
+            technics = new String[]{"no","no",oversampling};
             naiveBayes = new Classificator(Classificators.NAIVEBAYES);
             results = naiveBayes.walkForwardEvaluation(PROJECTNAME,releases, false, false, SamplingType.OVERSAMPLING);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "NaiveBayes",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.NAIVEBAYES,technics,results);
 
             ibk = new Classificator(Classificators.IBK);
             results = ibk.walkForwardEvaluation(PROJECTNAME,releases, false, false, SamplingType.OVERSAMPLING);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "IBk",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.IBK,technics,results);
 
             randomForest = new Classificator(Classificators.RANDOMFOREST);
             results = randomForest.walkForwardEvaluation(PROJECTNAME,releases, false, false, SamplingType.OVERSAMPLING);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "RandomForest",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.RANDOMFOREST,technics,results);
 
             //Validation with cost sensitivity (CFN = 10*CFP)
-            technics = new String[]{"cost sensitivity","no","no"};
+            technics = new String[]{costsensitivity,"no","no"};
             naiveBayes = new Classificator(Classificators.NAIVEBAYES);
             results = naiveBayes.walkForwardEvaluation(PROJECTNAME,releases, true, false, null);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "NaiveBayes",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.NAIVEBAYES,technics,results);
 
             ibk = new Classificator(Classificators.IBK);
             results = ibk.walkForwardEvaluation(PROJECTNAME,releases, true, false, null);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "IBk",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.IBK,technics,results);
 
             randomForest = new Classificator(Classificators.RANDOMFOREST);
             results = randomForest.walkForwardEvaluation(PROJECTNAME,releases, true, false, null);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "RandomForest",technics,results);
-            System.out.println("validation smote");
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.RANDOMFOREST,technics,results);
+
 
             //Validation with feature selection and with undersampling
-            technics = new String[]{"no","Backward search","undersampling"};
+            technics = new String[]{"no",backwardSearch,undersampling};
             naiveBayes = new Classificator(Classificators.NAIVEBAYES);
             results = naiveBayes.walkForwardEvaluation(PROJECTNAME,releases, false, true, SamplingType.UNDERSAMPLING);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "NaiveBayes",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.NAIVEBAYES,technics,results);
 
             ibk = new Classificator(Classificators.IBK);
             results = ibk.walkForwardEvaluation(PROJECTNAME,releases, false, true, SamplingType.UNDERSAMPLING);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "IBk",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.IBK,technics,results);
 
             randomForest = new Classificator(Classificators.RANDOMFOREST);
             results = randomForest.walkForwardEvaluation(PROJECTNAME,releases, false, true, SamplingType.UNDERSAMPLING);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "RandomForest",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.RANDOMFOREST,technics,results);
 
             //Validation with feature selection and with oversampling
-            technics = new String[]{"no","Backward search","oversampling"};
+            technics = new String[]{"no",backwardSearch,oversampling};
             naiveBayes = new Classificator(Classificators.NAIVEBAYES);
             results = naiveBayes.walkForwardEvaluation(PROJECTNAME,releases, false, true, SamplingType.OVERSAMPLING);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "NaiveBayes",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.NAIVEBAYES,technics,results);
 
             ibk = new Classificator(Classificators.IBK);
             results = ibk.walkForwardEvaluation(PROJECTNAME,releases, false, true, SamplingType.OVERSAMPLING);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "IBk",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.IBK,technics,results);
 
             randomForest = new Classificator(Classificators.RANDOMFOREST);
             results = randomForest.walkForwardEvaluation(PROJECTNAME,releases, false, true, SamplingType.OVERSAMPLING);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "RandomForest",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.RANDOMFOREST,technics,results);
 
             //Validation with feature selection and cost sensitivity (CFN = 10*CFP)
-            technics = new String[]{"cost sensitivity","Backward search","no"};
+            technics = new String[]{costsensitivity,backwardSearch,"no"};
             naiveBayes = new Classificator(Classificators.NAIVEBAYES);
             results = naiveBayes.walkForwardEvaluation(PROJECTNAME,releases, true, true, null);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "NaiveBayes",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.NAIVEBAYES,technics,results);
 
             ibk = new Classificator(Classificators.IBK);
             results = ibk.walkForwardEvaluation(PROJECTNAME,releases, true, true, null);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "IBk",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.IBK,technics,results);
 
             randomForest = new Classificator(Classificators.RANDOMFOREST);
             results = randomForest.walkForwardEvaluation(PROJECTNAME,releases, true, true, null);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "RandomForest",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.RANDOMFOREST,technics,results);
 
             //Validation with oversampling and cost sensitivity (CFN = 10*CFP)
-            technics = new String[]{"cost sensitivity","no","oversampling"};
+            technics = new String[]{costsensitivity,"no",oversampling};
             naiveBayes = new Classificator(Classificators.NAIVEBAYES);
             results = naiveBayes.walkForwardEvaluation(PROJECTNAME,releases, true, false, SamplingType.OVERSAMPLING);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "NaiveBayes",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.NAIVEBAYES,technics,results);
 
             ibk = new Classificator(Classificators.IBK);
             results = ibk.walkForwardEvaluation(PROJECTNAME,releases, true, false, SamplingType.OVERSAMPLING);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "IBk",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.IBK,technics,results);
 
             randomForest = new Classificator(Classificators.RANDOMFOREST);
             results = randomForest.walkForwardEvaluation(PROJECTNAME,releases, true, false, SamplingType.OVERSAMPLING);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "RandomForest",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.RANDOMFOREST,technics,results);
 
             //Validation with undersampling and cost sensitivity (CFN = 10*CFP)
-            technics = new String[]{"cost sensitivity","no","undersampling"};
+            technics = new String[]{costsensitivity,"no",undersampling};
             naiveBayes = new Classificator(Classificators.NAIVEBAYES);
             results = naiveBayes.walkForwardEvaluation(PROJECTNAME,releases, true, false, SamplingType.UNDERSAMPLING);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "NaiveBayes",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.NAIVEBAYES,technics,results);
 
             ibk = new Classificator(Classificators.IBK);
             results = ibk.walkForwardEvaluation(PROJECTNAME,releases, true, false, SamplingType.UNDERSAMPLING);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "IBk",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.IBK,technics,results);
 
             randomForest = new Classificator(Classificators.RANDOMFOREST);
             results = randomForest.walkForwardEvaluation(PROJECTNAME,releases, true, false, SamplingType.UNDERSAMPLING);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "RandomForest",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.RANDOMFOREST,technics,results);
 
             //Validation with feature selection with oversampling and cost sensitivity (CFN = 10*CFP)
-            technics = new String[]{"cost sensitivity","Backward search","oversampling"};
+            technics = new String[]{costsensitivity,backwardSearch,oversampling};
             naiveBayes = new Classificator(Classificators.NAIVEBAYES);
             results = naiveBayes.walkForwardEvaluation(PROJECTNAME,releases, true, true, SamplingType.OVERSAMPLING);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "NaiveBayes",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.NAIVEBAYES,technics,results);
 
             ibk = new Classificator(Classificators.IBK);
             results = ibk.walkForwardEvaluation(PROJECTNAME,releases, true, true, SamplingType.OVERSAMPLING);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "IBk",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.IBK,technics,results);
 
             randomForest = new Classificator(Classificators.RANDOMFOREST);
             results = randomForest.walkForwardEvaluation(PROJECTNAME,releases, true, true, SamplingType.OVERSAMPLING);
-            metricsFile.writeDataOnCsv(PROJECTNAME, "RandomForest",technics,results);
+            metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.RANDOMFOREST,technics,results);
 
             metricsFile.closeFile();
 

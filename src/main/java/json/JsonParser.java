@@ -64,12 +64,8 @@ public class JsonParser {
             Release release = new Release();
             JSONObject obj = result.getJSONObject(i);
             release.setName((String)obj.get("name"));
-            try {
-                release.setReleasedDate(stringToDate((String)obj.get("releaseDate")));
-                //if((Boolean)obj.get("released"))
-                    releases.add(release);
-            } catch (JSONException ignored) {
-            }
+            release.setReleasedDate(stringToDate((String)obj.get("releaseDate")));
+            releases.add(release);
         }
         return releases;
     }

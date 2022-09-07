@@ -3,6 +3,7 @@ package file_manager;
 import model.JavaClassFile;
 import model.Release;
 import org.apache.commons.lang3.ArrayUtils;
+import weka.Classificators;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,11 +48,11 @@ public class CsvCreator {
         this.closeFile();
     }
 
-    public void writeDataOnCsv(String project, String classifier, String[] technics, List<String[]> results){
+    public void writeDataOnCsv(String project, Classificators classifier, String[] technics, List<String[]> results){
         List<String[]> data = new ArrayList<>();
 
         for(int i = 0; i < results.size(); i++){
-            String[] configuration = ArrayUtils.addAll(new String[]{project,classifier,String.valueOf(i+1),
+            String[] configuration = ArrayUtils.addAll(new String[]{project,classifier.toString(),String.valueOf(i+1),
                     String.valueOf((int)(((double)i+1)/(results.size()+1)*100))},technics);
             data.add(ArrayUtils.addAll(configuration,results.get(i)));
 

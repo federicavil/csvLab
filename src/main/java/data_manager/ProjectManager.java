@@ -12,6 +12,9 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ProjectManager {
+    /**
+     * It manages a single project and retrieves project information about issues, releases, bugginess
+     */
 
     private String projectName;
     private String projectLocation;
@@ -32,16 +35,36 @@ public class ProjectManager {
         this.retriever = new DataRetriever(this.projectName);
     }
 
+    /**
+     *
+     * @return project issues (of type bug) list
+     * @throws IOException
+     * @throws ParseException
+     */
     public List<Issue> getIssues() throws IOException, ParseException {
         return this.retriever.retrieveIssues();
     }
 
+    /**
+     *
+     * @return project releases list
+     * @throws IOException
+     * @throws ParseException
+     */
+
     public List<Release> getReleases() throws IOException, ParseException {
         this.releases = this.retriever.retrieveReleases();
-        // Ordino le releases
+        // Ordino le releases in base alla data di rilascio
         Collections.sort(this.releases, Comparator.comparing(Release::getReleasedDate));
         return this.releases;
     }
+
+    /**
+     * It retrieves the issues with the associated opening, fixed and affected releases
+     * @return
+     * @throws IOException
+     * @throws ParseException
+     */
 
     public List<Issue> getIssueInfo() throws IOException, ParseException {
         List<Issue> issues = getIssues();
@@ -56,8 +79,8 @@ public class ProjectManager {
         List<Issue> issues;
 
         try {
-            // Recupero le release e i commit e le issues
-            this.releases = this.getReleases();
+            // Recupero le release e i commit e le issues( con associate le releases)
+            this.releases = getReleases();
             commits = this.retriever.retrieveCommits();
             issues = this.getIssueInfo();
 

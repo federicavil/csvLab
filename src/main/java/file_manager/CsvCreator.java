@@ -47,10 +47,13 @@ public class CsvCreator {
         this.closeFile();
     }
 
-    public void writeDataOnCsv(String project, String classifier, List<String[]> results){
+    public void writeDataOnCsv(String project, String classifier, String[] technics, List<String[]> results){
         List<String[]> data = new ArrayList<>();
+
         for(int i = 0; i < results.size(); i++){
-            data.add(ArrayUtils.addAll(new String[]{project,String.valueOf(i+1),classifier,},results.get(i)));
+            String[] configuration = ArrayUtils.addAll(new String[]{project,classifier,String.valueOf(i+1),
+                    String.valueOf((int)(((double)i+1)/(results.size()+1)*100))},technics);
+            data.add(ArrayUtils.addAll(configuration,results.get(i)));
 
         }
         this.file.addData(data);

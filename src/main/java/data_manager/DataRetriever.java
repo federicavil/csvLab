@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataRetriever {
+    /**
+     * It implements the retrieving of project information
+     */
 
     private String projectname;
     private String projectLocation;
@@ -33,6 +36,13 @@ public class DataRetriever {
         this.projectLocation = projectLocation;
     }
 
+    /**
+     *
+     * @return list of all the resolved or closed bugs of the project, obtained from Jira
+     * @throws IOException
+     * @throws ParseException
+     */
+
     public List<Issue> retrieveIssues() throws IOException, ParseException {
         int i = 0;
         int j;
@@ -52,6 +62,12 @@ public class DataRetriever {
         return issues;
     }
 
+    /**
+     *
+     * @return list of project releases obtained from Jira
+     * @throws IOException
+     * @throws ParseException
+     */
     public List<Release> retrieveReleases() throws IOException, ParseException {
         String url = "https://issues.apache.org/jira/rest/api/2/project/" + this.projectname + "/versions";
         JSONArray jsonResult = JsonReader.readJsonArrayFromUrl(url);

@@ -1,8 +1,6 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class Issue {
 
@@ -63,6 +61,7 @@ public class Issue {
     }
 
     public void setAffectedVersions(List<Release> affectedVersions) {
+        Collections.sort(affectedVersions, Comparator.comparing(Release::getReleasedDate));
         this.affectedVersions = affectedVersions;
     }
 

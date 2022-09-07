@@ -39,7 +39,8 @@ public class DataCalculator {
         HashMap<String, Integer> releaseMap = (HashMap<String, Integer>) Proportion.generateReleaseMap(this.releases);
         Integer fixVersion = releaseMap.get(issue.getFixVersion().getName());
         Integer openingVersion = releaseMap.get(issue.getOpeningVersion().getName());
-        Integer injectedVersion = (int)Math.round(fixVersion-(fixVersion-openingVersion)*proportion);
+        // Calcolo l'injected version utilizzando il valore di proportion
+        int injectedVersion = (int)Math.round(fixVersion-(fixVersion-openingVersion)*proportion);
         List<Release> affectedVersions = new ArrayList<>();
         for(Release release: this.releases){
             int relNumber = releaseMap.get(release.getName());
@@ -73,8 +74,9 @@ public class DataCalculator {
             if(this.releases.get(i).equals(release))
                 break;
         }
+
         for(int j = i; j < this.releases.size(); j++){
-            //Setto la bugginess vista dal punto di vista della release j a true
+            //Setto la bugginess del file dell'affected version vista dal punto di vista della release in cui viene scoperto il bug
             javaClassFile.isBuggy()[j] = true;
         }
     }
@@ -88,7 +90,6 @@ public class DataCalculator {
         if(newFile != null){
             setBugginess(release.getClasses().get(newFile),release);
         }
-
     }
 
     private void assignBugginess(Issue issue){
@@ -102,5 +103,4 @@ public class DataCalculator {
             }
         }
     }
-
 }

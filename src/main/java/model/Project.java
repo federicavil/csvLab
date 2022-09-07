@@ -6,6 +6,8 @@ public enum Project {
     OPENJPA,
     STORM,
     ZOOKEEPER,
-    //SYNCOPE,
-    TAJO
+    SYNCOPE,
+    TAJO,
+    FALCON,
+    IVY,
 }

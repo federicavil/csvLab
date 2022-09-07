@@ -142,6 +142,7 @@ public class JavaClassFile {
     public Set<String> getAuthors(){
         return this.authors;
     }
+
     public void incrementNR(){
         this.numberOfRevisions++;
     }

@@ -22,6 +22,12 @@ public class JsonParser {
         throw new IllegalStateException("Utility class");
     }
 
+    /**
+     * It executes the parsing of the project issues,
+     * @param jsonResult
+     * @return
+     * @throws ParseException
+     */
     public static List<Issue> getIssues(JSONObject jsonResult) throws ParseException {
         JSONArray jsonIssues = jsonResult.getJSONArray("issues");
         List<Issue> issues = new ArrayList<>();

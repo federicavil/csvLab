@@ -8,6 +8,9 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class FeatureCalculator {
+    /**
+     * it calculates the classes features
+     */
 
     private String projectName;
     private String projectLocation;
@@ -39,13 +42,19 @@ public class FeatureCalculator {
     }
 
     public void updateFeatures(JavaClassFile javaClass, Commit commit, Date releaseDate) throws IOException {
+        // Incrementa il numero di revisioni
         javaClass.incrementNR();
+        // Aggiunge l'autore del commit alla lista degli autori della classe
         javaClass.addAuthor(commit.getAuthor());
-        calculateAge(javaClass,releaseDate);
+        // Calcola l'age della classe per la release specificata
+        javaClass.setAge(calculateAge(javaClass.getCreationDate(),releaseDate));
+        // Calcolo ChgSetSize (numero di file committati insieme a questo)
         calculateChgSetSize(javaClass, commit);
+        // Calcolo le LOC
         if(javaClass.getLoc() == 0){
             calculateLines(javaClass, commit);
         }
+        // Calcolo churn
         else calculateChurn(javaClass, commit);
 
     }
@@ -60,11 +69,11 @@ public class FeatureCalculator {
         javaClass.getAvgChgSet()[1]++;
     }
 
-    private void calculateAge(JavaClassFile javaClass, Date releaseDate){
-        long diffInMillies = Math.abs(releaseDate.getTime() - javaClass.getCreationDate().getTime());
+    public int calculateAge(Date javaClassCreationdate, Date releaseDate){
+        long diffInMillies = Math.abs(releaseDate.getTime() - javaClassCreationdate.getTime());
         long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-        int weeks = (int)diff/7;
-        javaClass.setAge(weeks);
+        return (int)diff/7;
+
 
     }
 

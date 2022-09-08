@@ -49,7 +49,7 @@ public class Classificator {
 
     }
 
-    public List<String[]> walkForwardEvaluation(String project, List<Release> releases, boolean costSensitivity, boolean featureSelection, SamplingType sampling) throws Exception {
+    public List<String[]> walkForwardEvaluation(String project, List<Release> releases, CostSensitivityType costSensitivity, boolean featureSelection, SamplingType sampling) throws Exception {
         String trainingFile = "training-set-"+project;
         String testingFile = "testing-set-"+project;
         List<String[]> results = new ArrayList<>();
@@ -78,7 +78,7 @@ public class Classificator {
         return results;
     }
 
-    public Evaluation evaluate(String trainingFile, String testingFile, boolean costSensitivity, boolean featureSelection, SamplingType sampling) throws Exception {
+    public Evaluation evaluate(String trainingFile, String testingFile, CostSensitivityType costSensitivity, boolean featureSelection, SamplingType sampling) throws Exception {
         DataSource source1 = new DataSource(trainingFile+ EXTENSION);
         Instances training = source1.getDataSet();
         DataSource source2 = new DataSource(testingFile+ EXTENSION);
@@ -133,13 +133,22 @@ public class Classificator {
             this.wekaClassifier = fc;
         }
 
-        if(costSensitivity){
+        if(costSensitivity != null){
             CostSensitiveClassifier classifier = new CostSensitiveClassifier();
             CostMatrix matrix = new CostMatrix(2);
-            matrix.setCell(0, 1, 1.0);
-            matrix.setCell(1, 0, 10.0);
-            classifier.setCostMatrix(matrix);
-            classifier.setMinimizeExpectedCost(true);
+            if(costSensitivity == CostSensitivityType.SENSITIVITY_LEARNING) {
+                matrix.setCell(0, 1, 1.0);
+                matrix.setCell(1, 0, 10.0);
+                classifier.setCostMatrix(matrix);
+                classifier.setMinimizeExpectedCost(false);
+            }
+            else{
+                matrix.setCell(0, 1, 1.0);
+                matrix.setCell(1, 0, 1.0);
+                classifier.setCostMatrix(matrix);
+                classifier.setMinimizeExpectedCost(true);
+            }
+
             classifier.setClassifier(this.wekaClassifier);
             classifier.buildClassifier(training);
             this.wekaClassifier = classifier;

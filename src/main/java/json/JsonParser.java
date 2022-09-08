@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -64,8 +66,14 @@ public class JsonParser {
             Release release = new Release();
             JSONObject obj = result.getJSONObject(i);
             release.setName((String)obj.get("name"));
-            release.setReleasedDate(stringToDate((String)obj.get("releaseDate")));
-            releases.add(release);
+            if((boolean)obj.get("released")) {
+                try {
+                    release.setReleasedDate(stringToDate((String) obj.get("releaseDate")));
+                    releases.add(release);
+                } catch (JSONException ignored) {
+                    Logger.getLogger("Log").log(Level.INFO, "Release not valid");
+                }
+            }
         }
         return releases;
     }

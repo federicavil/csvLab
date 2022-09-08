@@ -51,7 +51,7 @@ public class DataCalculator {
         this.issues.get(index).setAffectedVersions(affectedVersions);
     }
 
-    private void updateClassBugginess(Release affectedVersion, List<Commit> relatedCommit){
+    private void updateClassBugginess(Release affectedVersion, List<Commit> relatedCommit, Release fixVersion){
         for(Commit commit: relatedCommit){
             //Prendo i file modificati da ogni commit che si riferisce alla issue considerata
             for(String file: commit.getClassModified()){
@@ -62,7 +62,7 @@ public class DataCalculator {
                 }
                 else {
                     // Aggiorno la bugginess
-                    setBugginess(affectedVersion.getClasses().get(file),commit.getRelease());
+                    setBugginess(affectedVersion.getClasses().get(file),fixVersion);
                 }
             }
         }
@@ -97,7 +97,7 @@ public class DataCalculator {
             for(Release release: this.releases){
                 if (release.getName().equals(affectedVersion.getName())) {
                     // Se sto considerando l'affected version aggiorno la bugginess
-                    updateClassBugginess(release, issue.getRelatedCommits());
+                    updateClassBugginess(release, issue.getRelatedCommits(), issue.getFixVersion());
                     break;
                 }
             }

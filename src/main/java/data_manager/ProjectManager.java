@@ -95,8 +95,9 @@ public class ProjectManager {
             DataCalculator calculator = new DataCalculator(issues,this.releases);
             this.releases = calculator.calculateBugginess(proportion);
 
+            int halfIdx = (int) Math.round(this.releases.size()/2.0);
             //elimino la metà delle release per lo snoring
-            this.releases = this.releases.subList(0,this.releases.size()/2);
+            this.releases = this.releases.subList(0,halfIdx);
 
 
         } catch (IOException | ParseException e) {

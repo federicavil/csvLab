@@ -16,8 +16,8 @@ import java.util.List;
 
 public class Main {
 
-    private static final String PROJECTNAME = "BOOKKEEPER";
-    private static final String PROJECTLOCATION = "C:/Users/Federica/git/bookkeeper_ml";
+    private static final String PROJECTNAME = "SYNCOPE";
+    private static final String PROJECTLOCATION = "C:/Users/Federica/git/syncope_ml";
 
     public static void main(String[] args) throws IOException, ParseException {
         // Calcolo il valore di proportion tramite cold start

@@ -46,8 +46,8 @@ public class Main {
             String backwardSearch = "Backward search";
             String oversampling = "oversampling";
             String undersampling = "undersampling";
-            String sensitivity_learning = "sensitivity learning";
-            String sensitivity_threshold = "sensitivity_threshold";
+            String sensitivityLearning = "sensitivity learning";
+            String sensitivityThreshold = "sensitivity_threshold";
             Classificator naiveBayes;
             Classificator ibk;
             Classificator randomForest;
@@ -109,7 +109,7 @@ public class Main {
             metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.RANDOMFOREST,technics,results);
 
             //Validation with cost sensitivity learning (CFN = 10*CFP)
-            technics = new String[]{sensitivity_learning,"no","no"};
+            technics = new String[]{sensitivityLearning,"no","no"};
             naiveBayes = new Classificator(Classificators.NAIVEBAYES);
             results = naiveBayes.walkForwardEvaluation(PROJECTNAME,releases, CostSensitivityType.SENSITIVITY_LEARNING, false, null);
             metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.NAIVEBAYES,technics,results);
@@ -123,7 +123,7 @@ public class Main {
             metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.RANDOMFOREST,technics,results);
 
             //Validation with cost sensitivity threshold
-            technics = new String[]{sensitivity_learning,"no","no"};
+            technics = new String[]{sensitivityLearning,"no","no"};
             naiveBayes = new Classificator(Classificators.NAIVEBAYES);
             results = naiveBayes.walkForwardEvaluation(PROJECTNAME,releases, CostSensitivityType.SENSITIVITY_THRESHOLD, false, null);
             metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.NAIVEBAYES,technics,results);
@@ -165,7 +165,7 @@ public class Main {
             metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.RANDOMFOREST,technics,results);
 
             //Validation with feature selection and cost sensitivity learning(CFN = 10*CFP)
-            technics = new String[]{sensitivity_learning,backwardSearch,"no"};
+            technics = new String[]{sensitivityLearning,backwardSearch,"no"};
             naiveBayes = new Classificator(Classificators.NAIVEBAYES);
             results = naiveBayes.walkForwardEvaluation(PROJECTNAME,releases, CostSensitivityType.SENSITIVITY_LEARNING, true, null);
             metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.NAIVEBAYES,technics,results);
@@ -179,7 +179,7 @@ public class Main {
             metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.RANDOMFOREST,technics,results);
 
             //Validation with feature selection and cost sensitivity threshold
-            technics = new String[]{sensitivity_learning,backwardSearch,"no"};
+            technics = new String[]{sensitivityLearning,backwardSearch,"no"};
             naiveBayes = new Classificator(Classificators.NAIVEBAYES);
             results = naiveBayes.walkForwardEvaluation(PROJECTNAME,releases, CostSensitivityType.SENSITIVITY_THRESHOLD, true, null);
             metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.NAIVEBAYES,technics,results);
@@ -193,7 +193,7 @@ public class Main {
             metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.RANDOMFOREST,technics,results);
 
             //Validation with oversampling and cost sensitivity learning(CFN = 10*CFP)
-            technics = new String[]{sensitivity_learning,"no",oversampling};
+            technics = new String[]{sensitivityLearning,"no",oversampling};
             naiveBayes = new Classificator(Classificators.NAIVEBAYES);
             results = naiveBayes.walkForwardEvaluation(PROJECTNAME,releases, CostSensitivityType.SENSITIVITY_LEARNING, false, SamplingType.OVERSAMPLING);
             metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.NAIVEBAYES,technics,results);
@@ -207,7 +207,7 @@ public class Main {
             metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.RANDOMFOREST,technics,results);
 
             //Validation with oversampling and cost sensitivity threshold
-            technics = new String[]{sensitivity_threshold,"no",oversampling};
+            technics = new String[]{sensitivityThreshold,"no",oversampling};
             naiveBayes = new Classificator(Classificators.NAIVEBAYES);
             results = naiveBayes.walkForwardEvaluation(PROJECTNAME,releases, CostSensitivityType.SENSITIVITY_THRESHOLD, false, SamplingType.OVERSAMPLING);
             metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.NAIVEBAYES,technics,results);
@@ -222,7 +222,7 @@ public class Main {
 
 
             //Validation with undersampling and cost sensitivity learning (CFN = 10*CFP)
-            technics = new String[]{sensitivity_learning,"no",undersampling};
+            technics = new String[]{sensitivityLearning,"no",undersampling};
             naiveBayes = new Classificator(Classificators.NAIVEBAYES);
             results = naiveBayes.walkForwardEvaluation(PROJECTNAME,releases, CostSensitivityType.SENSITIVITY_LEARNING, false, SamplingType.UNDERSAMPLING);
             metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.NAIVEBAYES,technics,results);
@@ -236,7 +236,7 @@ public class Main {
             metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.RANDOMFOREST,technics,results);
 
             //Validation with undersampling and cost sensitivity threshold
-            technics = new String[]{sensitivity_threshold,"no",undersampling};
+            technics = new String[]{sensitivityThreshold,"no",undersampling};
             naiveBayes = new Classificator(Classificators.NAIVEBAYES);
             results = naiveBayes.walkForwardEvaluation(PROJECTNAME,releases, CostSensitivityType.SENSITIVITY_THRESHOLD, false, SamplingType.UNDERSAMPLING);
             metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.NAIVEBAYES,technics,results);
@@ -251,7 +251,7 @@ public class Main {
 
 
             //Validation with feature selection with oversampling and cost sensitivity learning (CFN = 10*CFP)
-            technics = new String[]{sensitivity_learning,backwardSearch,oversampling};
+            technics = new String[]{sensitivityLearning,backwardSearch,oversampling};
             naiveBayes = new Classificator(Classificators.NAIVEBAYES);
             results = naiveBayes.walkForwardEvaluation(PROJECTNAME,releases, CostSensitivityType.SENSITIVITY_LEARNING, true, SamplingType.OVERSAMPLING);
             metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.NAIVEBAYES,technics,results);
@@ -265,7 +265,7 @@ public class Main {
             metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.RANDOMFOREST,technics,results);
 
             //Validation with feature selection with oversampling and cost sensitivity threshold
-            technics = new String[]{sensitivity_threshold,backwardSearch,oversampling};
+            technics = new String[]{sensitivityThreshold,backwardSearch,oversampling};
             naiveBayes = new Classificator(Classificators.NAIVEBAYES);
             results = naiveBayes.walkForwardEvaluation(PROJECTNAME,releases, CostSensitivityType.SENSITIVITY_THRESHOLD, true, SamplingType.OVERSAMPLING);
             metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.NAIVEBAYES,technics,results);
@@ -279,7 +279,7 @@ public class Main {
             metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.RANDOMFOREST,technics,results);
 
             //Validation with feature selection with undersampling and cost sensitivity learning(CFN = 10*CFP)
-            technics = new String[]{sensitivity_learning,backwardSearch,undersampling};
+            technics = new String[]{sensitivityLearning,backwardSearch,undersampling};
             naiveBayes = new Classificator(Classificators.NAIVEBAYES);
             results = naiveBayes.walkForwardEvaluation(PROJECTNAME,releases, CostSensitivityType.SENSITIVITY_LEARNING, true, SamplingType.UNDERSAMPLING);
             metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.NAIVEBAYES,technics,results);
@@ -293,7 +293,7 @@ public class Main {
             metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.RANDOMFOREST,technics,results);
 
             //Validation with feature selection with undersampling and cost sensitivity threshold
-            technics = new String[]{sensitivity_threshold,backwardSearch,undersampling};
+            technics = new String[]{sensitivityThreshold,backwardSearch,undersampling};
             naiveBayes = new Classificator(Classificators.NAIVEBAYES);
             results = naiveBayes.walkForwardEvaluation(PROJECTNAME,releases, CostSensitivityType.SENSITIVITY_THRESHOLD, true, SamplingType.UNDERSAMPLING);
             metricsFile.writeDataOnCsv(PROJECTNAME, Classificators.NAIVEBAYES,technics,results);
